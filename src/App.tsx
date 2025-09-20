@@ -10,6 +10,7 @@ import 'primeicons/primeicons.css'
 interface WordPair {
   english: string;
   russian: string;
+  source?: string; // Add source to track which file the word came from
 }
 
 function App() {
@@ -42,7 +43,8 @@ function App() {
       // Convert object to array of word pairs
       const wordPairs: WordPair[] = Object.entries(data).map(([english, russian]) => ({
         english,
-        russian: russian as string
+        russian: russian as string,
+        source: fileName
       }))
       
       setSelectedData(wordPairs)
@@ -51,6 +53,38 @@ function App() {
       setIsFlipped(false)
     } catch (error) {
       console.error(`Error loading ${fileName}.json:`, error)
+    }
+  }
+
+  // Load all data from all JSON files
+  const loadAllData = async () => {
+    try {
+      const allWordPairs: WordPair[] = []
+      
+      for (const fileName of availableFiles) {
+        try {
+          const response = await fetch(`/data/${fileName}.json`)
+          const data = await response.json()
+          
+          // Convert object to array of word pairs with source
+          const wordPairs: WordPair[] = Object.entries(data).map(([english, russian]) => ({
+            english,
+            russian: russian as string,
+            source: fileName
+          }))
+          
+          allWordPairs.push(...wordPairs)
+        } catch (fileError) {
+          console.error(`Error loading ${fileName}.json:`, fileError)
+        }
+      }
+      
+      setSelectedData(allWordPairs)
+      setSelectedFileName('ALL')
+      setCurrentCardIndex(0)
+      setIsFlipped(false)
+    } catch (error) {
+      console.error('Error loading all data:', error)
     }
   }
 
@@ -121,6 +155,13 @@ function App() {
       : 'English translation'
   }
 
+  const getDisplayTitle = () => {
+    if (selectedFileName === 'ALL') {
+      return 'All Vocabulary Files'
+    }
+    return selectedFileName.charAt(0).toUpperCase() + selectedFileName.slice(1)
+  }
+
   useEffect(() => {
     getAvailableFiles()
   }, [])
@@ -131,6 +172,13 @@ function App() {
       
       <div className="file-buttons" style={{ marginBottom: '20px' }}>
         <h3>Select a vocabulary file:</h3>
+        {/* ALL Button */}
+        <Button
+            label="ALL"
+            onClick={loadAllData}
+            className={`vocabulary-button all-button ${selectedFileName === 'ALL' ? 'active' : ''}`}
+            severity={selectedFileName === 'ALL' ? 'success' : 'info'}
+        />
         {availableFiles.map((fileName) => (
           <Button
             key={fileName}
@@ -178,12 +226,18 @@ function App() {
                     <div className="card-content">
                       <h2>{getPrimaryText()}</h2>
                       <p className="card-hint">{getPrimaryHint()}</p>
+                      {selectedFileName === 'ALL' && selectedData[currentCardIndex]?.source && (
+                        <p className="card-source">From: {selectedData[currentCardIndex].source}</p>
+                      )}
                     </div>
                   </div>
                   <div className="flashcard-back">
                     <div className="card-content">
                       <h2>{getSecondaryText()}</h2>
                       <p className="card-hint">{getSecondaryHint()}</p>
+                      {selectedFileName === 'ALL' && selectedData[currentCardIndex]?.source && (
+                        <p className="card-source">From: {selectedData[currentCardIndex].source}</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -209,13 +263,25 @@ function App() {
             />
           </div>
 
-          {/* Data Table - Only shown when showTable is true */}
+          {/* Data Table with Pagination - Only shown when showTable is true */}
           {showTable && (
             <div className="data-table">
-              <h3>Vocabulary: {selectedFileName.charAt(0).toUpperCase() + selectedFileName.slice(1)}</h3>
-              <DataTable value={selectedData} tableStyle={{ minWidth: '50rem' }}>
-                <Column field="english" header="English" style={{ width: '50%' }}></Column>
-                <Column field="russian" header="Russian" style={{ width: '50%' }}></Column>
+              <h3>Vocabulary: {getDisplayTitle()}</h3>
+              <DataTable 
+                value={selectedData} 
+                tableStyle={{ minWidth: '50rem' }}
+                paginator 
+                rows={10} 
+                rowsPerPageOptions={[5, 10, 25, 50]}
+                totalRecords={selectedData.length}
+                paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+                currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+              >
+                <Column field="english" header="English" style={{ width: selectedFileName === 'ALL' ? '40%' : '50%' }}></Column>
+                <Column field="russian" header="Russian" style={{ width: selectedFileName === 'ALL' ? '40%' : '50%' }}></Column>
+                {selectedFileName === 'ALL' && (
+                  <Column field="source" header="Source" style={{ width: '20%' }}></Column>
+                )}
               </DataTable>
             </div>
           )}

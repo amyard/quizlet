@@ -45,6 +45,29 @@
   border-color: #047857 !important;
 }
 
+/* ALL Button Specific Styles */
+.all-button {
+  background-color: #8b5cf6 !important;
+  border-color: #8b5cf6 !important;
+  font-weight: 700 !important;
+}
+
+.all-button:hover {
+  background-color: #7c3aed !important;
+  border-color: #7c3aed !important;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4) !important;
+}
+
+.all-button.active {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+}
+
+.all-button.active:hover {
+  background-color: #047857 !important;
+  border-color: #047857 !important;
+}
+
 /* Language Toggle Styles */
 .language-toggle {
   display: flex;
@@ -187,6 +210,18 @@
   font-style: italic;
 }
 
+.card-source {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin: 8px 0 0 0;
+  font-style: italic;
+  color: #fef3c7;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
 .flashcard:hover {
   transform: translateY(-5px);
   transition: transform 0.3s ease;
@@ -214,6 +249,33 @@
 .p-datatable .p-datatable-thead > tr > th {
   background-color: #f8f9fa;
   font-weight: 600;
+}
+
+/* Pagination Styles */
+.p-paginator {
+  background-color: #f8f9fa !important;
+  border: 1px solid #e9ecef !important;
+  border-radius: 0 0 8px 8px !important;
+  padding: 10px !important;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page {
+  background-color: #fff !important;
+  border: 1px solid #dee2e6 !important;
+  color: #6c757d !important;
+  margin: 0 2px !important;
+  border-radius: 4px !important;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page:hover {
+  background-color: #e9ecef !important;
+  color: #495057 !important;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background-color: #007bff !important;
+  border-color: #007bff !important;
+  color: #fff !important;
 }
 
 .p-button {
