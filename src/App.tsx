@@ -19,6 +19,7 @@ function App() {
   const [currentCardIndex, setCurrentCardIndex] = useState<number>(0)
   const [isFlipped, setIsFlipped] = useState<boolean>(false)
   const [primaryLanguage, setPrimaryLanguage] = useState<'english' | 'russian'>('english')
+  const [showTable, setShowTable] = useState<boolean>(false)
 
   // Get list of JSON files in the data folder
   const getAvailableFiles = async () => {
@@ -59,15 +60,23 @@ function App() {
 
   const nextCard = () => {
     if (selectedData.length > 0) {
-      setCurrentCardIndex((prev) => (prev + 1) % selectedData.length)
+      // Reset flip state first to prevent flickering
       setIsFlipped(false)
+      // Use setTimeout to ensure state update is processed
+      setTimeout(() => {
+        setCurrentCardIndex((prev) => (prev + 1) % selectedData.length)
+      }, 0)
     }
   }
 
   const prevCard = () => {
     if (selectedData.length > 0) {
-      setCurrentCardIndex((prev) => (prev - 1 + selectedData.length) % selectedData.length)
+      // Reset flip state first to prevent flickering
       setIsFlipped(false)
+      // Use setTimeout to ensure state update is processed
+      setTimeout(() => {
+        setCurrentCardIndex((prev) => (prev - 1 + selectedData.length) % selectedData.length)
+      }, 0)
     }
   }
 
@@ -79,6 +88,10 @@ function App() {
   const switchToRussian = () => {
     setPrimaryLanguage('russian')
     setIsFlipped(false)
+  }
+
+  const toggleTable = () => {
+    setShowTable(!showTable)
   }
 
   // Get the primary text (shown first) and secondary text (shown when flipped)
@@ -185,13 +198,27 @@ function App() {
             </div>
           </div>
 
-          <div className="data-table">
-            <h3>Vocabulary: {selectedFileName.charAt(0).toUpperCase() + selectedFileName.slice(1)}</h3>
-            <DataTable value={selectedData} tableStyle={{ minWidth: '50rem' }}>
-              <Column field="english" header="English" style={{ width: '50%' }}></Column>
-              <Column field="russian" header="Russian" style={{ width: '50%' }}></Column>
-            </DataTable>
+          {/* Table Toggle Button */}
+          <div className="table-toggle-container">
+            <Button 
+              label={showTable ? 'Hide Vocabulary Table' : 'Show Vocabulary Table'}
+              icon={showTable ? 'pi pi-eye-slash' : 'pi pi-eye'}
+              onClick={toggleTable}
+              className="table-toggle-button"
+              severity="secondary"
+            />
           </div>
+
+          {/* Data Table - Only shown when showTable is true */}
+          {showTable && (
+            <div className="data-table">
+              <h3>Vocabulary: {selectedFileName.charAt(0).toUpperCase() + selectedFileName.slice(1)}</h3>
+              <DataTable value={selectedData} tableStyle={{ minWidth: '50rem' }}>
+                <Column field="english" header="English" style={{ width: '50%' }}></Column>
+                <Column field="russian" header="Russian" style={{ width: '50%' }}></Column>
+              </DataTable>
+            </div>
+          )}
         </>
       )}
     </div>
