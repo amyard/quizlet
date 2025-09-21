@@ -8,29 +8,80 @@ import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 
 interface WordPair {
-  english: string;
-  russian: string;
+  eng: string;
+  rus: string;
+  display: number;
   source?: string; // Add source to track which file the word came from
 }
 
 function App() {
   const [availableFiles, setAvailableFiles] = useState<string[]>([])
   const [selectedData, setSelectedData] = useState<WordPair[]>([])
+  const [allData, setAllData] = useState<WordPair[]>([]) // Store all data including display=0
   const [selectedFileName, setSelectedFileName] = useState<string>('')
   const [currentCardIndex, setCurrentCardIndex] = useState<number>(0)
   const [isFlipped, setIsFlipped] = useState<boolean>(false)
   const [primaryLanguage, setPrimaryLanguage] = useState<'english' | 'russian'>('english')
   const [showTable, setShowTable] = useState<boolean>(false)
+  const [displayFilter, setDisplayFilter] = useState<'active' | 'all'>('active')
 
   // Get list of JSON files in the data folder
   const getAvailableFiles = async () => {
     try {
       // Since we can't directly list files from the browser, we'll use a predefined list
       // In a real app, you'd need an API endpoint to list files
-      const fileNames = ['animals', 'colors', 'numbers'] // Add more as needed
+      const fileNames = ['animals', 'colors', 'numbers', 'lesson1', 'lesson2'] // Add more as needed
       setAvailableFiles(fileNames)
     } catch (error) {
       console.error('Error getting file list:', error)
+    }
+  }
+
+  // Apply display filter to the data
+  const applyDisplayFilter = (data: WordPair[], filter: 'active' | 'all') => {
+    if (filter === 'active') {
+      return data.filter((item: WordPair) => item.display === 1)
+    }
+    return data // Return all data (both display 0 and 1)
+  }
+
+  // Toggle word status between active (1) and inactive (0)
+  const toggleWordStatus = (wordToToggle: WordPair) => {
+    const newStatus = wordToToggle.display === 1 ? 0 : 1
+    
+    // Update in allData
+    const updatedAllData = allData.map(item => {
+      if (item.eng === wordToToggle.eng && item.rus === wordToToggle.rus && item.source === wordToToggle.source) {
+        return { ...item, display: newStatus }
+      }
+      return item
+    })
+    
+    setAllData(updatedAllData)
+    
+    // Update selectedData based on current filter
+    const filteredData = applyDisplayFilter(updatedAllData, displayFilter)
+    setSelectedData(filteredData)
+    
+    // Adjust currentCardIndex if needed
+    if (displayFilter === 'active' && newStatus === 0) {
+      // If we're in active mode and deactivated current card, move to next available card
+      if (selectedData[currentCardIndex] && 
+          selectedData[currentCardIndex].eng === wordToToggle.eng && 
+          selectedData[currentCardIndex].rus === wordToToggle.rus) {
+        const newIndex = Math.min(currentCardIndex, filteredData.length - 1)
+        setCurrentCardIndex(newIndex >= 0 ? newIndex : 0)
+      }
+    }
+    
+    // Note: In a real app, you would also save this change to the server/database
+    console.log(`Word "${wordToToggle.eng}" status changed to ${newStatus === 1 ? 'Active' : 'Inactive'}`)
+  }
+
+  // Toggle current flashcard word status
+  const toggleCurrentCardStatus = () => {
+    if (selectedData[currentCardIndex]) {
+      toggleWordStatus(selectedData[currentCardIndex])
     }
   }
 
@@ -40,14 +91,18 @@ function App() {
       const response = await fetch(`/data/${fileName}.json`)
       const data = await response.json()
       
-      // Convert object to array of word pairs
-      const wordPairs: WordPair[] = Object.entries(data).map(([english, russian]) => ({
-        english,
-        russian: russian as string,
+      // Store all data with source information
+      const allWordPairs: WordPair[] = data.map((item: WordPair) => ({
+        ...item,
         source: fileName
       }))
       
-      setSelectedData(wordPairs)
+      setAllData(allWordPairs)
+      
+      // Apply current display filter
+      const filteredData = applyDisplayFilter(allWordPairs, displayFilter)
+      
+      setSelectedData(filteredData)
       setSelectedFileName(fileName)
       setCurrentCardIndex(0)
       setIsFlipped(false)
@@ -66,10 +121,9 @@ function App() {
           const response = await fetch(`/data/${fileName}.json`)
           const data = await response.json()
           
-          // Convert object to array of word pairs with source
-          const wordPairs: WordPair[] = Object.entries(data).map(([english, russian]) => ({
-            english,
-            russian: russian as string,
+          // Store all data with source information
+          const wordPairs: WordPair[] = data.map((item: WordPair) => ({
+            ...item,
             source: fileName
           }))
           
@@ -79,13 +133,36 @@ function App() {
         }
       }
       
-      setSelectedData(allWordPairs)
+      setAllData(allWordPairs)
+      
+      // Apply current display filter
+      const filteredData = applyDisplayFilter(allWordPairs, displayFilter)
+      
+      setSelectedData(filteredData)
       setSelectedFileName('ALL')
       setCurrentCardIndex(0)
       setIsFlipped(false)
     } catch (error) {
       console.error('Error loading all data:', error)
     }
+  }
+
+  // Switch to show only active words (display = 1)
+  const showActiveWords = () => {
+    setDisplayFilter('active')
+    const filteredData = applyDisplayFilter(allData, 'active')
+    setSelectedData(filteredData)
+    setCurrentCardIndex(0)
+    setIsFlipped(false)
+  }
+
+  // Switch to show all words (display = 0 or 1)
+  const showAllWords = () => {
+    setDisplayFilter('all')
+    const filteredData = applyDisplayFilter(allData, 'all')
+    setSelectedData(filteredData)
+    setCurrentCardIndex(0)
+    setIsFlipped(false)
   }
 
   const handleCardClick = () => {
@@ -132,15 +209,15 @@ function App() {
   const getPrimaryText = () => {
     if (!selectedData[currentCardIndex]) return ''
     return primaryLanguage === 'english' 
-      ? selectedData[currentCardIndex].english 
-      : selectedData[currentCardIndex].russian
+      ? selectedData[currentCardIndex].eng 
+      : selectedData[currentCardIndex].rus
   }
 
   const getSecondaryText = () => {
     if (!selectedData[currentCardIndex]) return ''
     return primaryLanguage === 'english' 
-      ? selectedData[currentCardIndex].russian 
-      : selectedData[currentCardIndex].english
+      ? selectedData[currentCardIndex].rus 
+      : selectedData[currentCardIndex].eng
   }
 
   const getPrimaryHint = () => {
@@ -156,10 +233,23 @@ function App() {
   }
 
   const getDisplayTitle = () => {
-    if (selectedFileName === 'ALL') {
-      return 'All Vocabulary Files'
-    }
-    return selectedFileName.charAt(0).toUpperCase() + selectedFileName.slice(1)
+    const baseTitle = selectedFileName === 'ALL' ? 'All Vocabulary Files' : selectedFileName.charAt(0).toUpperCase() + selectedFileName.slice(1)
+    const filterSuffix = displayFilter === 'active' ? ' (Active Words)' : ' (All Words)'
+    return baseTitle + filterSuffix
+  }
+
+  // Render toggle status button for table
+  const renderStatusToggle = (rowData: WordPair) => {
+    return (
+      <Button
+        icon={rowData.display === 1 ? "pi pi-eye" : "pi pi-eye-slash"}
+        onClick={() => toggleWordStatus(rowData)}
+        className={`status-toggle-button ${rowData.display === 1 ? 'active' : 'inactive'}`}
+        severity={rowData.display === 1 ? 'success' : 'danger'}
+        size="small"
+        tooltip={rowData.display === 1 ? 'Click to deactivate' : 'Click to activate'}
+      />
+    )
   }
 
   useEffect(() => {
@@ -190,11 +280,44 @@ function App() {
         ))}
       </div>
 
+      {/* Display Filter Buttons */}
+      {selectedFileName && (
+        <div className="display-filter-container" style={{ marginBottom: '20px' }}>
+          <h3>Display options:</h3>
+          <Button
+            label="Active Words"
+            icon="pi pi-eye"
+            onClick={showActiveWords}
+            className={`filter-button ${displayFilter === 'active' ? 'active' : ''}`}
+            severity={displayFilter === 'active' ? 'success' : 'secondary'}
+          />
+          <Button
+            label="All Words"
+            icon="pi pi-list"
+            onClick={showAllWords}
+            className={`filter-button ${displayFilter === 'all' ? 'active' : ''}`}
+            severity={displayFilter === 'all' ? 'success' : 'secondary'}
+          />
+        </div>
+      )}
+
       {selectedData.length > 0 && (
         <>
           {/* Flashcard Component */}
           <div className="flashcard-container">
             <h3>Flashcard ({currentCardIndex + 1} of {selectedData.length})</h3>
+            
+            {/* Card Status Toggle */}
+            <div className="card-status-toggle">
+              <Button
+                label={selectedData[currentCardIndex]?.display === 1 ? 'Deactivate Word' : 'Activate Word'}
+                icon={selectedData[currentCardIndex]?.display === 1 ? 'pi pi-eye-slash' : 'pi pi-eye'}
+                onClick={toggleCurrentCardStatus}
+                className={`card-toggle-button ${selectedData[currentCardIndex]?.display === 1 ? 'active' : 'inactive'}`}
+                severity={selectedData[currentCardIndex]?.display === 1 ? 'danger' : 'success'}
+                size="small"
+              />
+            </div>
             
             {/* Language Toggle Buttons */}
             <div className="language-toggle">
@@ -229,6 +352,9 @@ function App() {
                       {selectedFileName === 'ALL' && selectedData[currentCardIndex]?.source && (
                         <p className="card-source">From: {selectedData[currentCardIndex].source}</p>
                       )}
+                      {displayFilter === 'all' && selectedData[currentCardIndex]?.display === 0 && (
+                        <p className="card-status">Status: Inactive</p>
+                      )}
                     </div>
                   </div>
                   <div className="flashcard-back">
@@ -237,6 +363,9 @@ function App() {
                       <p className="card-hint">{getSecondaryHint()}</p>
                       {selectedFileName === 'ALL' && selectedData[currentCardIndex]?.source && (
                         <p className="card-source">From: {selectedData[currentCardIndex].source}</p>
+                      )}
+                      {displayFilter === 'all' && selectedData[currentCardIndex]?.display === 0 && (
+                        <p className="card-status">Status: Inactive</p>
                       )}
                     </div>
                   </div>
@@ -277,10 +406,27 @@ function App() {
                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                 currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
               >
-                <Column field="english" header="English" style={{ width: selectedFileName === 'ALL' ? '40%' : '50%' }}></Column>
-                <Column field="russian" header="Russian" style={{ width: selectedFileName === 'ALL' ? '40%' : '50%' }}></Column>
+                <Column field="eng" header="English" style={{ width: selectedFileName === 'ALL' ? '30%' : displayFilter === 'all' ? '35%' : '45%' }}></Column>
+                <Column field="rus" header="Russian" style={{ width: selectedFileName === 'ALL' ? '30%' : displayFilter === 'all' ? '35%' : '45%' }}></Column>
+                <Column 
+                  header="Toggle Status" 
+                  style={{ width: '15%', textAlign: 'center' }}
+                  body={renderStatusToggle}
+                ></Column>
+                {displayFilter === 'all' && (
+                  <Column 
+                    field="display" 
+                    header="Status" 
+                    style={{ width: '10%' }}
+                    body={(rowData) => (
+                      <span className={`status-badge ${rowData.display === 1 ? 'active' : 'inactive'}`}>
+                        {rowData.display === 1 ? 'Active' : 'Inactive'}
+                      </span>
+                    )}
+                  ></Column>
+                )}
                 {selectedFileName === 'ALL' && (
-                  <Column field="source" header="Source" style={{ width: '20%' }}></Column>
+                  <Column field="source" header="Source" style={{ width: '15%' }}></Column>
                 )}
               </DataTable>
             </div>

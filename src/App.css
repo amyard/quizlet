@@ -358,3 +358,150 @@
   transform: translateY(-2px) !important;
   box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3) !important;
 }
+
+/* Card Status Toggle Styles */
+.card-status-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.card-toggle-button {
+  padding: 8px 16px !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  transition: all 0.3s ease !important;
+  font-size: 0.9rem !important;
+}
+
+.card-toggle-button.active {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: white !important;
+}
+
+.card-toggle-button.active:hover {
+  background-color: #b91c1c !important;
+  border-color: #b91c1c !important;
+  transform: scale(1.05) !important;
+}
+
+.card-toggle-button.inactive {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: white !important;
+}
+
+.card-toggle-button.inactive:hover {
+  background-color: #047857 !important;
+  border-color: #047857 !important;
+  transform: scale(1.05) !important;
+}
+
+/* Status Toggle Button Styles in Table */
+.status-toggle-button {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  transition: all 0.3s ease !important;
+  padding: 0 !important;
+}
+
+.status-toggle-button.active {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: white !important;
+}
+
+.status-toggle-button.active:hover {
+  background-color: #047857 !important;
+  border-color: #047857 !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4) !important;
+}
+
+.status-toggle-button.inactive {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: white !important;
+}
+
+.status-toggle-button.inactive:hover {
+  background-color: #b91c1c !important;
+  border-color: #b91c1c !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4) !important;
+}
+
+/* Display Filter Styles */
+.display-filter-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.display-filter-container h3 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.filter-button {
+  margin: 5px;
+  padding: 10px 20px !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+  background-color: #6b7280 !important;
+  border: 2px solid #6b7280 !important;
+  color: white !important;
+}
+
+.filter-button:hover {
+  background-color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3) !important;
+}
+
+.filter-button.active {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+}
+
+.filter-button.active:hover {
+  background-color: #047857 !important;
+  border-color: #047857 !important;
+}
+
+/* Status Badge Styles */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-badge.active {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.status-badge.inactive {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+/* Card Status Styles */
+.card-status {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin: 8px 0 0 0;
+  font-style: italic;
+  color: #fca5a5;
+  background-color: rgba(239, 68, 68, 0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
