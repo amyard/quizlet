@@ -1,3 +1,429 @@
+/* Dialog Header and Close Button Styles */
+.p-dialog .p-dialog-header {
+  background-color: #f8f9fa !important;
+  border-bottom: 1px solid #e9ecef !important;
+  border-radius: 8px 8px 0 0 !important;
+  padding: 1rem 1.5rem !important;
+}
+
+.p-dialog .p-dialog-header .p-dialog-title {
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  color: #374151 !important;
+}
+
+/* Close Button (X) Styles */
+.p-dialog .p-dialog-header .p-dialog-header-close {
+  width: 2rem !important;
+  height: 2rem !important;
+  border-radius: 50% !important;
+  background-color: #6b7280 !important;
+  border: 1px solid #6b7280 !important;
+  color: white !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+}
+
+.p-dialog .p-dialog-header .p-dialog-header-close:hover {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: white !important;
+  transform: scale(1.1) !important;
+}
+
+.p-dialog .p-dialog-header .p-dialog-header-close:focus {
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2) !important;
+  outline: none !important;
+}
+
+/* Close Button Icon */
+.p-dialog .p-dialog-header .p-dialog-header-close .p-dialog-header-close-icon {
+  font-size: 0.875rem !important;
+  color: inherit !important;
+}
+
+/* Dialog Styles */
+.dialog-content {
+  padding: 1rem 0;
+}
+
+.form-field {
+  margin-bottom: 1rem;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.form-input {
+  width: 100% !important;
+  padding: 0.6rem !important;
+  border-radius: 6px !important;
+  border: 1px solid #d1d5db !important;
+  font-size: 0.9rem !important;
+  transition: border-color 0.2s ease !important;
+}
+
+.form-input:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.dialog-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.dialog-buttons .p-button {
+  padding: 0.6rem 1.2rem !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  margin: 0 !important;
+  min-width: 80px !important;
+}
+
+/* Cancel Button Styles */
+.dialog-buttons .p-button[data-pc-severity="secondary"],
+.dialog-buttons .p-button.p-button-secondary {
+  background-color: #6b7280 !important;
+  border-color: #6b7280 !important;
+  color: white !important;
+}
+
+.dialog-buttons .p-button[data-pc-severity="secondary"]:hover,
+.dialog-buttons .p-button.p-button-secondary:hover {
+  background-color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  color: white !important;
+}
+
+/* Save/Add Button Styles */
+.dialog-buttons .p-button[data-pc-severity="success"],
+.dialog-buttons .p-button.p-button-success {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: white !important;
+}
+
+.dialog-buttons .p-button[data-pc-severity="success"]:hover,
+.dialog-buttons .p-button.p-button-success:hover {
+  background-color: #047857 !important;
+  border-color: #047857 !important;
+  color: white !important;
+}
+
+/* Ensure all dialog buttons have proper styling */
+.p-dialog .p-dialog-footer .p-button {
+  padding: 0.6rem 1.2rem !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  margin: 0 0.25rem !important;
+  min-width: 80px !important;
+}
+
+/* Default button styling for dialogs */
+.p-dialog .p-button {
+  background-color: #3b82f6 !important;
+  border-color: #3b82f6 !important;
+  color: white !important;
+}
+
+.p-dialog .p-button:hover {
+  background-color: #2563eb !important;
+  border-color: #2563eb !important;
+  color: white !important;
+}
+
+/* Table Header and Search Styles */
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.search-input {
+  width: 300px !important;
+  padding: 0.5rem 0.5rem 0.5rem 2.5rem !important;
+  border-radius: 6px !important;
+  border: 1px solid #d1d5db !important;
+  font-size: 0.9rem !important;
+}
+
+.search-input:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.clear-search-button {
+  padding: 0.5rem !important;
+  border-radius: 50% !important;
+  background-color: #6b7280 !important;
+  border-color: #6b7280 !important;
+}
+
+.clear-search-button:hover {
+  background-color: #4b5563 !important;
+  border-color: #4b5563 !important;
+}
+
+.add-word-button {
+  padding: 0.6rem 1.2rem !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+}
+
+.add-word-button:hover {
+  background-color: #047857 !important;
+  border-color: #047857 !important;
+}
+
+.add-word-button:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+/* Action Buttons in Table */
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-button {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 4px !important;
+  background-color: #3b82f6 !important;
+  border-color: #3b82f6 !important;
+  padding: 0 !important;
+}
+
+.edit-button:hover {
+  background-color: #2563eb !important;
+  border-color: #2563eb !important;
+}
+
+.delete-button {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 4px !important;
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  padding: 0 !important;
+}
+
+.delete-button:hover {
+  background-color: #b91c1c !important;
+  border-color: #b91c1c !important;
+}
+
+/* Enhanced Status Toggle Button Styles in Table */
+.status-toggle-button {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+  padding: 0 !important;
+}
+
+.status-toggle-button.active {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: white !important;
+}
+
+.status-toggle-button.active:hover {
+  background-color: #047857 !important;
+  border-color: #047857 !important;
+  transform: scale(1.05) !important;
+}
+
+.status-toggle-button.inactive {
+  background-color: #6b7280 !important;
+  border-color: #6b7280 !important;
+  color: white !important;
+}
+
+.status-toggle-button.inactive:hover {
+  background-color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  transform: scale(1.05) !important;
+}
+
+/* Toast Positioning */
+.p-toast {
+  z-index: 9999 !important;
+}
+
+.p-toast .p-toast-message {
+  border-radius: 8px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Enhanced Table Styles */
+.p-datatable .p-datatable-tbody > tr:hover {
+  background-color: #f8f9fa !important;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.75rem !important;
+  vertical-align: middle !important;
+}
+
+/* Empty Message Styling */
+.p-datatable .p-datatable-emptymessage {
+  text-align: center !important;
+  padding: 2rem !important;
+  color: #6b7280 !important;
+  font-style: italic !important;
+}
+
+/* Search Icon Positioning */
+.p-input-icon-left > i:first-of-type {
+  left: 0.75rem !important;
+  color: #6b7280 !important;
+}
+
+.p-input-icon-left > .p-inputtext {
+  padding-left: 2.5rem !important;
+}
+
+/* Card Status Toggle Styles */
+.card-status-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.card-toggle-button {
+  padding: 8px 16px !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  transition: all 0.3s ease !important;
+  font-size: 0.9rem !important;
+}
+
+.card-toggle-button.active {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: white !important;
+}
+
+.card-toggle-button.active:hover {
+  background-color: #b91c1c !important;
+  border-color: #b91c1c !important;
+  transform: scale(1.05) !important;
+}
+
+.card-toggle-button.inactive {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: white !important;
+}
+
+.card-toggle-button.inactive:hover {
+  background-color: #047857 !important;
+  border-color: #047857 !important;
+  transform: scale(1.05) !important;
+}
+
+/* Display Filter Styles */
+.display-filter-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.display-filter-container h3 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.filter-button {
+  margin: 5px;
+  padding: 10px 20px !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+  background-color: #6b7280 !important;
+  border: 2px solid #6b7280 !important;
+  color: white !important;
+}
+
+.filter-button:hover {
+  background-color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3) !important;
+}
+
+.filter-button.active {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+}
+
+.filter-button.active:hover {
+  background-color: #047857 !important;
+  border-color: #047857 !important;
+}
+
+/* Status Badge Styles */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-badge.active {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.status-badge.inactive {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+/* Card Status Styles */
+.card-status {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin: 8px 0 0 0;
+  font-style: italic;
+  color: #fca5a5;
+  background-color: rgba(239, 68, 68, 0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -333,6 +759,21 @@
   .flashcard-navigation {
     gap: 15px;
   }
+
+  .table-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .search-container {
+    justify-content: center;
+  }
+
+  .search-input {
+    width: 100% !important;
+    max-width: 300px;
+  }
 }
 
 /* Table Toggle Styles */
@@ -357,151 +798,4 @@
   border-color: #4b5563 !important;
   transform: translateY(-2px) !important;
   box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3) !important;
-}
-
-/* Card Status Toggle Styles */
-.card-status-toggle {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 15px;
-}
-
-.card-toggle-button {
-  padding: 8px 16px !important;
-  font-weight: 600 !important;
-  border-radius: 6px !important;
-  transition: all 0.3s ease !important;
-  font-size: 0.9rem !important;
-}
-
-.card-toggle-button.active {
-  background-color: #dc2626 !important;
-  border-color: #dc2626 !important;
-  color: white !important;
-}
-
-.card-toggle-button.active:hover {
-  background-color: #b91c1c !important;
-  border-color: #b91c1c !important;
-  transform: scale(1.05) !important;
-}
-
-.card-toggle-button.inactive {
-  background-color: #059669 !important;
-  border-color: #059669 !important;
-  color: white !important;
-}
-
-.card-toggle-button.inactive:hover {
-  background-color: #047857 !important;
-  border-color: #047857 !important;
-  transform: scale(1.05) !important;
-}
-
-/* Status Toggle Button Styles in Table */
-.status-toggle-button {
-  width: 40px !important;
-  height: 40px !important;
-  border-radius: 50% !important;
-  transition: all 0.3s ease !important;
-  padding: 0 !important;
-}
-
-.status-toggle-button.active {
-  background-color: #059669 !important;
-  border-color: #059669 !important;
-  color: white !important;
-}
-
-.status-toggle-button.active:hover {
-  background-color: #047857 !important;
-  border-color: #047857 !important;
-  transform: scale(1.1) !important;
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4) !important;
-}
-
-.status-toggle-button.inactive {
-  background-color: #dc2626 !important;
-  border-color: #dc2626 !important;
-  color: white !important;
-}
-
-.status-toggle-button.inactive:hover {
-  background-color: #b91c1c !important;
-  border-color: #b91c1c !important;
-  transform: scale(1.1) !important;
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4) !important;
-}
-
-/* Display Filter Styles */
-.display-filter-container {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.display-filter-container h3 {
-  margin-bottom: 15px;
-  color: #333;
-}
-
-.filter-button {
-  margin: 5px;
-  padding: 10px 20px !important;
-  font-weight: 600 !important;
-  border-radius: 8px !important;
-  transition: all 0.3s ease !important;
-  background-color: #6b7280 !important;
-  border: 2px solid #6b7280 !important;
-  color: white !important;
-}
-
-.filter-button:hover {
-  background-color: #4b5563 !important;
-  border-color: #4b5563 !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3) !important;
-}
-
-.filter-button.active {
-  background-color: #059669 !important;
-  border-color: #059669 !important;
-}
-
-.filter-button.active:hover {
-  background-color: #047857 !important;
-  border-color: #047857 !important;
-}
-
-/* Status Badge Styles */
-.status-badge {
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.status-badge.active {
-  background-color: #d1fae5;
-  color: #065f46;
-  border: 1px solid #a7f3d0;
-}
-
-.status-badge.inactive {
-  background-color: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fca5a5;
-}
-
-/* Card Status Styles */
-.card-status {
-  font-size: 0.9rem;
-  opacity: 0.8;
-  margin: 8px 0 0 0;
-  font-style: italic;
-  color: #fca5a5;
-  background-color: rgba(239, 68, 68, 0.2);
-  padding: 4px 8px;
-  border-radius: 4px;
-  display: inline-block;
 }

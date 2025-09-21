@@ -1,13 +1,19 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 import { Button } from 'primereact/button'
+import { InputText } from 'primereact/inputtext'
+import { Dialog } from 'primereact/dialog'
+import { Toast } from 'primereact/toast'
+import { Dropdown } from 'primereact/dropdown'
+import { FilterMatchMode } from 'primereact/api'
 import './App.css'
 import 'primereact/resources/themes/lara-light-cyan/theme.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 
 interface WordPair {
+  id?: string; // Add unique ID for better tracking
   eng: string;
   rus: string;
   display: number;
@@ -18,12 +24,106 @@ function App() {
   const [availableFiles, setAvailableFiles] = useState<string[]>([])
   const [selectedData, setSelectedData] = useState<WordPair[]>([])
   const [allData, setAllData] = useState<WordPair[]>([]) // Store all data including display=0
+  const [filteredData, setFilteredData] = useState<WordPair[]>([]) // For search filtering
   const [selectedFileName, setSelectedFileName] = useState<string>('')
   const [currentCardIndex, setCurrentCardIndex] = useState<number>(0)
   const [isFlipped, setIsFlipped] = useState<boolean>(false)
   const [primaryLanguage, setPrimaryLanguage] = useState<'english' | 'russian'>('english')
   const [showTable, setShowTable] = useState<boolean>(false)
   const [displayFilter, setDisplayFilter] = useState<'active' | 'all'>('active')
+  
+  // Search and Edit states
+  const [globalFilterValue, setGlobalFilterValue] = useState<string>('')
+  const [filters, setFilters] = useState({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS }
+  })
+  
+  // Edit Word dialog states
+  const [showEditDialog, setShowEditDialog] = useState<boolean>(false)
+  const [editingWord, setEditingWord] = useState<WordPair | null>(null)
+  const [editForm, setEditForm] = useState({ eng: '', rus: '', display: 1 })
+  
+  // Add New Word dialog states
+  const [showAddDialog, setShowAddDialog] = useState<boolean>(false)
+  const [addForm, setAddForm] = useState({ eng: '', rus: '', display: 1, source: '' })
+  
+  // Toast reference
+  const toast = useRef<Toast>(null)
+
+  // Generate unique ID for words
+  const generateId = () => {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2)
+  }
+
+  // Show toast message
+  const showToast = (severity: 'success' | 'info' | 'warn' | 'error', summary: string, detail: string) => {
+    toast.current?.show({ severity, summary, detail, life: 3000 })
+  }
+
+  // Save data to JSON file via API
+  const saveToFile = async (fileName: string, data: WordPair[]) => {
+    try {
+      // Filter data for the specific file and remove internal properties
+      const fileData = data
+        .filter(item => item.source === fileName)
+        .map(({ id, source, ...rest }) => rest) // Remove id and source for JSON file
+      
+      // Send data to server API
+      const response = await fetch(`http://localhost:3001/api/save/${fileName}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(fileData)
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to save file');
+      }
+      
+      const result = await response.json();
+      console.log(`Successfully saved ${fileName}.json:`, fileData);
+      showToast('success', 'Saved', `Changes saved to ${fileName}.json`)
+      
+    } catch (error) {
+      console.error('Error saving file:', error);
+      
+      // Fallback to download if server is not available
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        showToast('warn', 'Server Offline', 'Server not running. Downloading file instead.')
+        downloadFile(fileName, data)
+      } else {
+        showToast('error', 'Error', `Failed to save changes: ${error.message}`)
+      }
+    }
+  }
+
+  // Fallback download function
+  const downloadFile = (fileName: string, data: WordPair[]) => {
+    try {
+      const fileData = data
+        .filter(item => item.source === fileName)
+        .map(({ id, source, ...rest }) => rest);
+      
+      const jsonString = JSON.stringify(fileData, null, 2);
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${fileName}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      URL.revokeObjectURL(url);
+      
+      showToast('info', 'Downloaded', `${fileName}.json downloaded. Replace in public/data/ folder.`);
+    } catch (error) {
+      showToast('error', 'Error', 'Failed to download file');
+    }
+  }
 
   // Get list of JSON files in the data folder
   const getAvailableFiles = async () => {
@@ -45,13 +145,139 @@ function App() {
     return data // Return all data (both display 0 and 1)
   }
 
+  // Global search filter
+  const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    let _filters = { ...filters }
+    _filters['global'].value = value
+    setFilters(_filters)
+    setGlobalFilterValue(value)
+  }
+
+  // Clear search
+  const clearSearch = () => {
+    setGlobalFilterValue('')
+    setFilters({
+      global: { value: null, matchMode: FilterMatchMode.CONTAINS }
+    })
+  }
+
+  // Edit word functionality
+  const editWord = (word: WordPair) => {
+    setEditingWord(word)
+    setEditForm({
+      eng: word.eng,
+      rus: word.rus,
+      display: word.display
+    })
+    setShowEditDialog(true)
+  }
+
+  const saveEditedWord = () => {
+    if (!editingWord || !editForm.eng.trim() || !editForm.rus.trim()) {
+      showToast('warn', 'Warning', 'Please fill in both English and Russian fields')
+      return
+    }
+
+    // Update in allData
+    const updatedAllData = allData.map(item => {
+      if (item.id === editingWord.id) {
+        return { ...item, eng: editForm.eng.trim(), rus: editForm.rus.trim(), display: editForm.display }
+      }
+      return item
+    })
+
+    setAllData(updatedAllData)
+
+    // Update filtered data
+    const filteredData = applyDisplayFilter(updatedAllData, displayFilter)
+    setSelectedData(filteredData)
+
+    // Save to file if not in ALL mode
+    if (selectedFileName !== 'ALL' && editingWord.source) {
+      saveToFile(editingWord.source, updatedAllData)
+    }
+
+    setShowEditDialog(false)
+    setEditingWord(null)
+    showToast('success', 'Success', 'Word updated successfully')
+  }
+
+  // Add new word functionality
+  const openAddDialog = () => {
+    setAddForm({
+      eng: '',
+      rus: '',
+      display: 1,
+      source: selectedFileName === 'ALL' ? availableFiles[0] : selectedFileName
+    })
+    setShowAddDialog(true)
+  }
+
+  const saveNewWord = () => {
+    if (!addForm.eng.trim() || !addForm.rus.trim() || !addForm.source) {
+      showToast('warn', 'Warning', 'Please fill in all required fields')
+      return
+    }
+
+    // Check for duplicates
+    const isDuplicate = allData.some(item => 
+      item.eng.toLowerCase() === addForm.eng.trim().toLowerCase() && 
+      item.rus.toLowerCase() === addForm.rus.trim().toLowerCase() &&
+      item.source === addForm.source
+    )
+
+    if (isDuplicate) {
+      showToast('warn', 'Warning', 'This word combination already exists in the selected file')
+      return
+    }
+
+    const newWord: WordPair = {
+      id: generateId(),
+      eng: addForm.eng.trim(),
+      rus: addForm.rus.trim(),
+      display: addForm.display,
+      source: addForm.source
+    }
+
+    const updatedAllData = [...allData, newWord]
+    setAllData(updatedAllData)
+
+    // Update filtered data
+    const filteredData = applyDisplayFilter(updatedAllData, displayFilter)
+    setSelectedData(filteredData)
+
+    // Save to file
+    saveToFile(addForm.source, updatedAllData)
+
+    setShowAddDialog(false)
+    showToast('success', 'Success', 'New word added successfully')
+  }
+
+  // Delete word functionality
+  const deleteWord = (word: WordPair) => {
+    const updatedAllData = allData.filter(item => item.id !== word.id)
+    setAllData(updatedAllData)
+
+    // Update filtered data
+    const filteredData = applyDisplayFilter(updatedAllData, displayFilter)
+    setSelectedData(filteredData)
+
+    // Save to file if not in ALL mode
+    if (selectedFileName !== 'ALL' && word.source) {
+      saveToFile(word.source, updatedAllData)
+    }
+
+    showToast('success', 'Success', 'Word deleted successfully')
+  }
+
   // Toggle word status between active (1) and inactive (0)
   const toggleWordStatus = (wordToToggle: WordPair) => {
     const newStatus = wordToToggle.display === 1 ? 0 : 1
     
     // Update in allData
     const updatedAllData = allData.map(item => {
-      if (item.eng === wordToToggle.eng && item.rus === wordToToggle.rus && item.source === wordToToggle.source) {
+      if (item.id === wordToToggle.id) {
         return { ...item, display: newStatus }
       }
       return item
@@ -67,15 +293,18 @@ function App() {
     if (displayFilter === 'active' && newStatus === 0) {
       // If we're in active mode and deactivated current card, move to next available card
       if (selectedData[currentCardIndex] && 
-          selectedData[currentCardIndex].eng === wordToToggle.eng && 
-          selectedData[currentCardIndex].rus === wordToToggle.rus) {
+          selectedData[currentCardIndex].id === wordToToggle.id) {
         const newIndex = Math.min(currentCardIndex, filteredData.length - 1)
         setCurrentCardIndex(newIndex >= 0 ? newIndex : 0)
       }
     }
     
-    // Note: In a real app, you would also save this change to the server/database
-    console.log(`Word "${wordToToggle.eng}" status changed to ${newStatus === 1 ? 'Active' : 'Inactive'}`)
+    // Save to file if not in ALL mode
+    if (selectedFileName !== 'ALL' && wordToToggle.source) {
+      saveToFile(wordToToggle.source, updatedAllData)
+    }
+
+    showToast('info', 'Status Changed', `Word "${wordToToggle.eng}" is now ${newStatus === 1 ? 'Active' : 'Inactive'}`)
   }
 
   // Toggle current flashcard word status
@@ -85,15 +314,30 @@ function App() {
     }
   }
 
-  // Load data from selected JSON file
+  // Load data from selected JSON file via API or fallback to static files
   const loadFileData = async (fileName: string) => {
     try {
-      const response = await fetch(`/data/${fileName}.json`)
-      const data = await response.json()
+      let response;
+      let data;
       
-      // Store all data with source information
+      // Try to load from API first
+      try {
+        response = await fetch(`http://localhost:3001/api/data/${fileName}`);
+        if (response.ok) {
+          data = await response.json();
+        } else {
+          throw new Error('API not available');
+        }
+      } catch (apiError) {
+        // Fallback to static files
+        response = await fetch(`/data/${fileName}.json`);
+        data = await response.json();
+      }
+      
+      // Store all data with source information and unique IDs
       const allWordPairs: WordPair[] = data.map((item: WordPair) => ({
         ...item,
+        id: generateId(),
         source: fileName
       }))
       
@@ -108,22 +352,38 @@ function App() {
       setIsFlipped(false)
     } catch (error) {
       console.error(`Error loading ${fileName}.json:`, error)
+      showToast('error', 'Error', `Failed to load ${fileName}.json`)
     }
   }
 
-  // Load all data from all JSON files
+  // Load all data from all JSON files via API or fallback to static files
   const loadAllData = async () => {
     try {
       const allWordPairs: WordPair[] = []
       
       for (const fileName of availableFiles) {
         try {
-          const response = await fetch(`/data/${fileName}.json`)
-          const data = await response.json()
+          let response;
+          let data;
           
-          // Store all data with source information
+          // Try to load from API first
+          try {
+            response = await fetch(`http://localhost:3001/api/data/${fileName}`);
+            if (response.ok) {
+              data = await response.json();
+            } else {
+              throw new Error('API not available');
+            }
+          } catch (apiError) {
+            // Fallback to static files
+            response = await fetch(`/data/${fileName}.json`);
+            data = await response.json();
+          }
+          
+          // Store all data with source information and unique IDs
           const wordPairs: WordPair[] = data.map((item: WordPair) => ({
             ...item,
+            id: generateId(),
             source: fileName
           }))
           
@@ -144,6 +404,7 @@ function App() {
       setIsFlipped(false)
     } catch (error) {
       console.error('Error loading all data:', error)
+      showToast('error', 'Error', 'Failed to load vocabulary files')
     }
   }
 
@@ -238,17 +499,72 @@ function App() {
     return baseTitle + filterSuffix
   }
 
-  // Render toggle status button for table
-  const renderStatusToggle = (rowData: WordPair) => {
+  // Render action buttons for table
+  const renderActionButtons = (rowData: WordPair) => {
     return (
-      <Button
-        icon={rowData.display === 1 ? "pi pi-eye" : "pi pi-eye-slash"}
-        onClick={() => toggleWordStatus(rowData)}
-        className={`status-toggle-button ${rowData.display === 1 ? 'active' : 'inactive'}`}
-        severity={rowData.display === 1 ? 'success' : 'danger'}
-        size="small"
-        tooltip={rowData.display === 1 ? 'Click to deactivate' : 'Click to activate'}
-      />
+      <div className="action-buttons">
+        <Button
+          icon="pi pi-pencil"
+          onClick={() => editWord(rowData)}
+          className="edit-button"
+          severity="info"
+          size="small"
+          tooltip="Edit word"
+        />
+        <Button
+          icon="pi pi-trash"
+          onClick={() => deleteWord(rowData)}
+          className="delete-button"
+          severity="danger"
+          size="small"
+          tooltip="Delete word"
+        />
+        <Button
+          icon={rowData.display === 1 ? "pi pi-eye" : "pi pi-eye-slash"}
+          onClick={() => toggleWordStatus(rowData)}
+          className={`status-toggle-button ${rowData.display === 1 ? 'active' : 'inactive'}`}
+          severity={rowData.display === 1 ? 'success' : 'secondary'}
+          size="small"
+          tooltip={rowData.display === 1 ? 'Click to deactivate' : 'Click to activate'}
+        />
+      </div>
+    )
+  }
+
+  // Render search header
+  const renderHeader = () => {
+    return (
+      <div className="table-header">
+        <div className="search-container">
+          <span className="p-input-icon-left">
+            <i className="pi pi-search" />
+            <InputText
+              value={globalFilterValue}
+              onChange={onGlobalFilterChange}
+              placeholder="Search words..."
+              className="search-input"
+            />
+          </span>
+          {globalFilterValue && (
+            <Button
+              icon="pi pi-times"
+              onClick={clearSearch}
+              className="clear-search-button"
+              severity="secondary"
+              size="small"
+              tooltip="Clear search"
+            />
+          )}
+        </div>
+        <Button
+          label="Add New Word"
+          icon="pi pi-plus"
+          onClick={openAddDialog}
+          className="add-word-button"
+          severity="success"
+          disabled={selectedFileName === 'ALL'}
+        />
+      </div>
     )
   }
 
@@ -258,6 +574,8 @@ function App() {
 
   return (
     <div className="App">
+      <Toast ref={toast} />
+      
       <h1>Quizlet - English to Russian Dictionary</h1>
       
       <div className="file-buttons" style={{ marginBottom: '20px' }}>
@@ -392,12 +710,15 @@ function App() {
             />
           </div>
 
-          {/* Data Table with Pagination - Only shown when showTable is true */}
+          {/* Data Table with Search and Edit functionality */}
           {showTable && (
             <div className="data-table">
               <h3>Vocabulary: {getDisplayTitle()}</h3>
               <DataTable 
-                value={selectedData} 
+                value={selectedData}
+                filters={filters}
+                globalFilterFields={['eng', 'rus', 'source']}
+                header={renderHeader()}
                 tableStyle={{ minWidth: '50rem' }}
                 paginator 
                 rows={10} 
@@ -405,14 +726,10 @@ function App() {
                 totalRecords={selectedData.length}
                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                 currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+                emptyMessage="No words found."
               >
-                <Column field="eng" header="English" style={{ width: selectedFileName === 'ALL' ? '30%' : displayFilter === 'all' ? '35%' : '45%' }}></Column>
-                <Column field="rus" header="Russian" style={{ width: selectedFileName === 'ALL' ? '30%' : displayFilter === 'all' ? '35%' : '45%' }}></Column>
-                <Column 
-                  header="Toggle Status" 
-                  style={{ width: '15%', textAlign: 'center' }}
-                  body={renderStatusToggle}
-                ></Column>
+                <Column field="eng" header="English" style={{ width: '25%' }}></Column>
+                <Column field="rus" header="Russian" style={{ width: '25%' }}></Column>
                 {displayFilter === 'all' && (
                   <Column 
                     field="display" 
@@ -428,11 +745,141 @@ function App() {
                 {selectedFileName === 'ALL' && (
                   <Column field="source" header="Source" style={{ width: '15%' }}></Column>
                 )}
+                <Column 
+                  header="Actions" 
+                  style={{ width: '25%', textAlign: 'center' }}
+                  body={renderActionButtons}
+                ></Column>
               </DataTable>
             </div>
           )}
         </>
       )}
+
+      {/* Edit Word Dialog */}
+      <Dialog
+        header="Edit Word"
+        visible={showEditDialog}
+        onHide={() => setShowEditDialog(false)}
+        style={{ width: '500px' }}
+        modal
+      >
+        <div className="dialog-content">
+          <div className="form-field">
+            <label htmlFor="edit-eng">English:</label>
+            <InputText
+              id="edit-eng"
+              value={editForm.eng}
+              onChange={(e) => setEditForm({ ...editForm, eng: e.target.value })}
+              className="form-input"
+              placeholder="Enter English word"
+            />
+          </div>
+          <div className="form-field">
+            <label htmlFor="edit-rus">Russian:</label>
+            <InputText
+              id="edit-rus"
+              value={editForm.rus}
+              onChange={(e) => setEditForm({ ...editForm, rus: e.target.value })}
+              className="form-input"
+              placeholder="Enter Russian word"
+            />
+          </div>
+          <div className="form-field">
+            <label htmlFor="edit-display">Status:</label>
+            <Dropdown
+              id="edit-display"
+              value={editForm.display}
+              onChange={(e) => setEditForm({ ...editForm, display: e.value })}
+              options={[
+                { label: 'Active', value: 1 },
+                { label: 'Inactive', value: 0 }
+              ]}
+              className="form-input"
+            />
+          </div>
+          <div className="dialog-buttons">
+            <Button
+              label="Cancel"
+              onClick={() => setShowEditDialog(false)}
+              severity="secondary"
+            />
+            <Button
+              label="Save"
+              onClick={saveEditedWord}
+              severity="success"
+            />
+          </div>
+        </div>
+      </Dialog>
+
+      {/* Add New Word Dialog */}
+      <Dialog
+        header="Add New Word"
+        visible={showAddDialog}
+        onHide={() => setShowAddDialog(false)}
+        style={{ width: '500px' }}
+        modal
+      >
+        <div className="dialog-content">
+          <div className="form-field">
+            <label htmlFor="add-eng">English: *</label>
+            <InputText
+              id="add-eng"
+              value={addForm.eng}
+              onChange={(e) => setAddForm({ ...addForm, eng: e.target.value })}
+              className="form-input"
+              placeholder="Enter English word"
+            />
+          </div>
+          <div className="form-field">
+            <label htmlFor="add-rus">Russian: *</label>
+            <InputText
+              id="add-rus"
+              value={addForm.rus}
+              onChange={(e) => setAddForm({ ...addForm, rus: e.target.value })}
+              className="form-input"
+              placeholder="Enter Russian word"
+            />
+          </div>
+          <div className="form-field">
+            <label htmlFor="add-source">File: *</label>
+            <Dropdown
+              id="add-source"
+              value={addForm.source}
+              onChange={(e) => setAddForm({ ...addForm, source: e.value })}
+              options={availableFiles.map(file => ({ label: file.charAt(0).toUpperCase() + file.slice(1), value: file }))}
+              className="form-input"
+              placeholder="Select file"
+            />
+          </div>
+          <div className="form-field">
+            <label htmlFor="add-display">Status:</label>
+            <Dropdown
+              id="add-display"
+              value={addForm.display}
+              onChange={(e) => setAddForm({ ...addForm, display: e.value })}
+              options={[
+                { label: 'Active', value: 1 },
+                { label: 'Inactive', value: 0 }
+              ]}
+              className="form-input"
+            />
+          </div>
+          <div className="dialog-buttons">
+            <Button
+              label="Cancel"
+              onClick={() => setShowAddDialog(false)}
+              severity="secondary"
+            />
+            <Button
+              label="Add"
+              onClick={saveNewWord}
+              severity="success"
+            />
+          </div>
+        </div>
+      </Dialog>
     </div>
   )
 }
