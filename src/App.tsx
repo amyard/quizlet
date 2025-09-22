@@ -26,6 +26,7 @@ function App() {
   const [allData, setAllData] = useState<WordPair[]>([]) // Store all data including display=0
   const [filteredData, setFilteredData] = useState<WordPair[]>([]) // For search filtering
   const [selectedFileName, setSelectedFileName] = useState<string>('')
+  const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]) // For multiple selection
   const [currentCardIndex, setCurrentCardIndex] = useState<number>(0)
   const [isFlipped, setIsFlipped] = useState<boolean>(false)
   const [primaryLanguage, setPrimaryLanguage] = useState<'english' | 'russian'>('english')
@@ -121,7 +122,7 @@ function App() {
       
       showToast('info', 'Downloaded', `${fileName}.json downloaded. Replace in public/data/ folder.`);
     } catch (error) {
-      showToast('error', 'Error', 'Failed to download file');
+      showToast('error', 'Error', 'Failed to download file')
     }
   }
 
@@ -209,8 +210,8 @@ function App() {
     const filteredData = applyDisplayFilter(updatedAllData, displayFilter)
     setSelectedData(filteredData)
 
-    // Save to file if not in ALL mode
-    if (selectedFileName !== 'ALL' && editingWord.source) {
+    // Save to file if not in ALL or MULTI mode
+    if (selectedFileName !== 'ALL' && selectedFileName !== 'MULTI' && editingWord.source) {
       saveToFile(editingWord.source, updatedAllData)
     }
 
@@ -225,7 +226,7 @@ function App() {
       eng: '',
       rus: '',
       display: 1,
-      source: selectedFileName === 'ALL' ? availableFiles[0] : selectedFileName
+      source: selectedFileName === 'ALL' || selectedFileName === 'MULTI' ? availableFiles[0] : selectedFileName
     })
     setShowAddDialog(true)
   }
@@ -279,8 +280,8 @@ function App() {
     const filteredData = applyDisplayFilter(updatedAllData, displayFilter)
     setSelectedData(filteredData)
 
-    // Save to file if not in ALL mode
-    if (selectedFileName !== 'ALL' && word.source) {
+    // Save to file if not in ALL or MULTI mode
+    if (selectedFileName !== 'ALL' && selectedFileName !== 'MULTI' && word.source) {
       saveToFile(word.source, updatedAllData)
     }
 
@@ -315,8 +316,8 @@ function App() {
       }
     }
     
-    // Save to file if not in ALL mode
-    if (selectedFileName !== 'ALL' && wordToToggle.source) {
+    // Save to file if not in ALL or MULTI mode
+    if (selectedFileName !== 'ALL' && selectedFileName !== 'MULTI' && wordToToggle.source) {
       saveToFile(wordToToggle.source, updatedAllData)
     }
 
@@ -327,6 +328,31 @@ function App() {
   const toggleCurrentCardStatus = () => {
     if (selectedData[currentCardIndex]) {
       toggleWordStatus(selectedData[currentCardIndex])
+    }
+  }
+
+  // Handle file selection with Shift support
+  const handleFileSelection = (fileName: string, event: React.MouseEvent) => {
+    if (event.shiftKey) {
+      // Multi-selection mode with Shift key
+      const newSelectedFiles = selectedFileNames.includes(fileName)
+        ? selectedFileNames.filter(f => f !== fileName) // Remove if already selected
+        : [...selectedFileNames, fileName] // Add if not selected
+      
+      setSelectedFileNames(newSelectedFiles)
+      
+      if (newSelectedFiles.length > 0) {
+        loadMultipleFiles(newSelectedFiles)
+      } else {
+        // If no files selected, clear data
+        setAllData([])
+        setSelectedData([])
+        setSelectedFileName('')
+      }
+    } else {
+      // Single selection mode (normal click)
+      setSelectedFileNames([])
+      loadFileData(fileName)
     }
   }
 
@@ -369,6 +395,60 @@ function App() {
     } catch (error) {
       console.error(`Error loading ${fileName}.json:`, error)
       showToast('error', 'Error', `Failed to load ${fileName}.json`)
+    }
+  }
+
+  // Load data from multiple selected files
+  const loadMultipleFiles = async (fileNames: string[]) => {
+    try {
+      const allWordPairs: WordPair[] = []
+      
+      for (const fileName of fileNames) {
+        try {
+          let response;
+          let data;
+          
+          // Try to load from API first
+          try {
+            response = await fetch(`http://localhost:3001/api/data/${fileName}`);
+            if (response.ok) {
+              data = await response.json();
+            } else {
+              throw new Error('API not available');
+            }
+          } catch (apiError) {
+            // Fallback to static files
+            response = await fetch(`/data/${fileName}.json`);
+            data = await response.json();
+          }
+          
+          // Store all data with source information and unique IDs
+          const wordPairs: WordPair[] = data.map((item: WordPair) => ({
+            ...item,
+            id: generateId(),
+            source: fileName
+          }))
+          
+          allWordPairs.push(...wordPairs)
+        } catch (fileError) {
+          console.error(`Error loading ${fileName}.json:`, fileError)
+        }
+      }
+      
+      setAllData(allWordPairs)
+      
+      // Apply current display filter
+      const filteredData = applyDisplayFilter(allWordPairs, displayFilter)
+      
+      setSelectedData(filteredData)
+      setSelectedFileName('MULTI')
+      setCurrentCardIndex(0)
+      setIsFlipped(false)
+      
+      showToast('success', 'Loaded', `Loaded ${fileNames.length} files: ${fileNames.join(', ')}`)
+    } catch (error) {
+      console.error('Error loading multiple files:', error)
+      showToast('error', 'Error', 'Failed to load some vocabulary files')
     }
   }
 
@@ -416,6 +496,7 @@ function App() {
       
       setSelectedData(filteredData)
       setSelectedFileName('ALL')
+      setSelectedFileNames([])
       setCurrentCardIndex(0)
       setIsFlipped(false)
     } catch (error) {
@@ -510,7 +591,14 @@ function App() {
   }
 
   const getDisplayTitle = () => {
-    const baseTitle = selectedFileName === 'ALL' ? 'All Vocabulary Files' : selectedFileName.charAt(0).toUpperCase() + selectedFileName.slice(1)
+    let baseTitle = ''
+    if (selectedFileName === 'ALL') {
+      baseTitle = 'All Vocabulary Files'
+    } else if (selectedFileName === 'MULTI') {
+      baseTitle = `Selected Files (${selectedFileNames.join(', ')})`
+    } else {
+      baseTitle = selectedFileName.charAt(0).toUpperCase() + selectedFileName.slice(1)
+    }
     const filterSuffix = displayFilter === 'active' ? ' (Active Words)' : ' (All Words)'
     return baseTitle + filterSuffix
   }
@@ -578,7 +666,7 @@ function App() {
           onClick={openAddDialog}
           className="add-word-button"
           severity="success"
-          disabled={selectedFileName === 'ALL'}
+          disabled={selectedFileName === 'ALL' || selectedFileName === 'MULTI'}
         />
       </div>
     )
@@ -596,10 +684,11 @@ function App() {
       
       <div className="file-buttons" style={{ marginBottom: '20px' }}>
         <h3>Select a vocabulary file:</h3>
+        <p className="selection-hint">Hold <strong>Shift</strong> and click to select multiple lessons</p>
         {/* ALL Button */}
         <Button
             label="ALL"
-            onClick={loadAllData}
+            onClick={(e) => loadAllData()}
             className={`vocabulary-button all-button ${selectedFileName === 'ALL' ? 'active' : ''}`}
             severity={selectedFileName === 'ALL' ? 'success' : 'info'}
         />
@@ -607,12 +696,38 @@ function App() {
           <Button
             key={fileName}
             label={fileName.charAt(0).toUpperCase() + fileName.slice(1)}
-            onClick={() => loadFileData(fileName)}
-            className={`vocabulary-button ${selectedFileName === fileName ? 'active' : ''}`}
-            severity={selectedFileName === fileName ? 'success' : 'secondary'}
+            onClick={(e) => handleFileSelection(fileName, e)}
+            className={`vocabulary-button ${
+              selectedFileName === fileName || selectedFileNames.includes(fileName) ? 'active' : ''
+            } ${selectedFileNames.includes(fileName) ? 'multi-selected' : ''}`}
+            severity={
+              selectedFileName === fileName || selectedFileNames.includes(fileName) ? 'success' : 'secondary'
+            }
           />
         ))}
       </div>
+
+      {/* Display selected files info */}
+      {selectedFileNames.length > 0 && (
+        <div className="multi-selection-info">
+          <p>
+            <strong>Selected lessons:</strong> {selectedFileNames.join(', ')} 
+            <Button 
+              icon="pi pi-times" 
+              onClick={() => {
+                setSelectedFileNames([])
+                setAllData([])
+                setSelectedData([])
+                setSelectedFileName('')
+              }}
+              className="clear-selection-button"
+              severity="secondary"
+              size="small"
+              tooltip="Clear selection"
+            />
+          </p>
+        </div>
+      )}
 
       {/* Display Filter Buttons */}
       {selectedFileName && (
@@ -683,7 +798,7 @@ function App() {
                     <div className="card-content">
                       <h2>{getPrimaryText()}</h2>
                       <p className="card-hint">{getPrimaryHint()}</p>
-                      {selectedFileName === 'ALL' && selectedData[currentCardIndex]?.source && (
+                      {(selectedFileName === 'ALL' || selectedFileName === 'MULTI') && selectedData[currentCardIndex]?.source && (
                         <p className="card-source">From: {selectedData[currentCardIndex].source}</p>
                       )}
                       {displayFilter === 'all' && selectedData[currentCardIndex]?.display === 0 && (
@@ -695,7 +810,7 @@ function App() {
                     <div className="card-content">
                       <h2>{getSecondaryText()}</h2>
                       <p className="card-hint">{getSecondaryHint()}</p>
-                      {selectedFileName === 'ALL' && selectedData[currentCardIndex]?.source && (
+                      {(selectedFileName === 'ALL' || selectedFileName === 'MULTI') && selectedData[currentCardIndex]?.source && (
                         <p className="card-source">From: {selectedData[currentCardIndex].source}</p>
                       )}
                       {displayFilter === 'all' && selectedData[currentCardIndex]?.display === 0 && (
@@ -758,7 +873,7 @@ function App() {
                     )}
                   ></Column>
                 )}
-                {selectedFileName === 'ALL' && (
+                {(selectedFileName === 'ALL' || selectedFileName === 'MULTI') && (
                   <Column field="source" header="Source" style={{ width: '15%' }}></Column>
                 )}
                 <Column 
