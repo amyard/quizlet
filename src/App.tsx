@@ -125,15 +125,31 @@ function App() {
     }
   }
 
-  // Get list of JSON files in the data folder
+  // Get list of JSON files in the data folder dynamically
   const getAvailableFiles = async () => {
     try {
-      // Since we can't directly list files from the browser, we'll use a predefined list
-      // In a real app, you'd need an API endpoint to list files
-      const fileNames = ['animals', 'colors', 'numbers', 'lesson1', 'lesson2'] // Add more as needed
-      setAvailableFiles(fileNames)
+      // Try to get files from API first
+      try {
+        const response = await fetch('http://localhost:3001/api/files');
+        if (response.ok) {
+          const fileNames = await response.json();
+          setAvailableFiles(fileNames);
+          console.log('Loaded files from API:', fileNames);
+          return;
+        }
+      } catch (apiError) {
+        console.log('API not available, using fallback file list');
+      }
+      
+      // Fallback to predefined list if API is not available
+      const fallbackFiles = ['lesson1', 'lesson2', 'lesson3', 'lesson4', 'lesson5'];
+      setAvailableFiles(fallbackFiles);
+      console.log('Using fallback file list:', fallbackFiles);
+      
     } catch (error) {
-      console.error('Error getting file list:', error)
+      console.error('Error getting file list:', error);
+      // Use minimal fallback
+      setAvailableFiles(['lesson1', 'lesson2']);
     }
   }
 
