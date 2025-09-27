@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 import { Button } from 'primereact/button'
@@ -24,7 +24,6 @@ function App() {
   const [availableFiles, setAvailableFiles] = useState<string[]>([])
   const [selectedData, setSelectedData] = useState<WordPair[]>([])
   const [allData, setAllData] = useState<WordPair[]>([]) // Store all data including display=0
-  const [filteredData, setFilteredData] = useState<WordPair[]>([]) // For search filtering
   const [selectedFileName, setSelectedFileName] = useState<string>('')
   const [selectedFileNames, setSelectedFileNames] = useState<string[]>([]) // For multiple selection
   const [currentCardIndex, setCurrentCardIndex] = useState<number>(0)
@@ -36,7 +35,7 @@ function App() {
   // Search and Edit states
   const [globalFilterValue, setGlobalFilterValue] = useState<string>('')
   const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS }
+    global: { value: null as string | null, matchMode: FilterMatchMode.CONTAINS }
   })
   
   // Edit Word dialog states
@@ -67,7 +66,11 @@ function App() {
       // Filter data for the specific file and remove internal properties
       const fileData = data
         .filter(item => item.source === fileName)
-        .map(({ id, source, ...rest }) => rest) // Remove id and source for JSON file
+        .map((item) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { id, source, ...rest } = item;
+          return rest;
+        }) // Remove id and source for JSON file
       
       // Send data to server API
       const response = await fetch(`http://localhost:3001/api/save/${fileName}`, {
@@ -83,7 +86,7 @@ function App() {
         throw new Error(errorData.error || 'Failed to save file');
       }
       
-      const result = await response.json();
+      await response.json();
       console.log(`Successfully saved ${fileName}.json:`, fileData);
       showToast('success', 'Saved', `Changes saved to ${fileName}.json`)
       
@@ -95,7 +98,8 @@ function App() {
         showToast('warn', 'Server Offline', 'Server not running. Downloading file instead.')
         downloadFile(fileName, data)
       } else {
-        showToast('error', 'Error', `Failed to save changes: ${error.message}`)
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+        showToast('error', 'Error', `Failed to save changes: ${errorMessage}`)
       }
     }
   }
@@ -105,7 +109,11 @@ function App() {
     try {
       const fileData = data
         .filter(item => item.source === fileName)
-        .map(({ id, source, ...rest }) => rest);
+        .map((item) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { id, source, ...rest } = item;
+          return rest;
+        });
       
       const jsonString = JSON.stringify(fileData, null, 2);
       const blob = new Blob([jsonString], { type: 'application/json' });
@@ -121,7 +129,7 @@ function App() {
       URL.revokeObjectURL(url);
       
       showToast('info', 'Downloaded', `${fileName}.json downloaded. Replace in public/data/ folder.`);
-    } catch (error) {
+    } catch {
       showToast('error', 'Error', 'Failed to download file')
     }
   }
@@ -138,7 +146,7 @@ function App() {
           console.log('Loaded files from API:', fileNames);
           return;
         }
-      } catch (apiError) {
+      } catch {
         console.log('API not available, using fallback file list');
       }
       
@@ -165,8 +173,8 @@ function App() {
   // Global search filter
   const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    let _filters = { ...filters }
-    _filters['global'].value = value
+    const _filters = { ...filters }
+    _filters['global'].value = value || null
     setFilters(_filters)
     setGlobalFilterValue(value)
   }
@@ -370,7 +378,7 @@ function App() {
         } else {
           throw new Error('API not available');
         }
-      } catch (apiError) {
+      } catch {
         // Fallback to static files
         response = await fetch(`/data/${fileName}.json`);
         data = await response.json();
@@ -416,7 +424,7 @@ function App() {
             } else {
               throw new Error('API not available');
             }
-          } catch (apiError) {
+          } catch {
             // Fallback to static files
             response = await fetch(`/data/${fileName}.json`);
             data = await response.json();
@@ -470,7 +478,7 @@ function App() {
             } else {
               throw new Error('API not available');
             }
-          } catch (apiError) {
+          } catch {
             // Fallback to static files
             response = await fetch(`/data/${fileName}.json`);
             data = await response.json();
@@ -688,7 +696,7 @@ function App() {
         {/* ALL Button */}
         <Button
             label="ALL"
-            onClick={(e) => loadAllData()}
+            onClick={() => loadAllData()}
             className={`vocabulary-button all-button ${selectedFileName === 'ALL' ? 'active' : ''}`}
             severity={selectedFileName === 'ALL' ? 'success' : 'info'}
         />
@@ -729,24 +737,56 @@ function App() {
         </div>
       )}
 
-      {/* Display Filter Buttons */}
+      {/* Settings Section */}
       {selectedFileName && (
-        <div className="display-filter-container" style={{ marginBottom: '20px' }}>
-          <h3>Display options:</h3>
-          <Button
-            label="Active Words"
-            icon="pi pi-eye"
-            onClick={showActiveWords}
-            className={`filter-button ${displayFilter === 'active' ? 'active' : ''}`}
-            severity={displayFilter === 'active' ? 'success' : 'secondary'}
-          />
-          <Button
-            label="All Words"
-            icon="pi pi-list"
-            onClick={showAllWords}
-            className={`filter-button ${displayFilter === 'all' ? 'active' : ''}`}
-            severity={displayFilter === 'all' ? 'success' : 'secondary'}
-          />
+        <div className="settings-section">
+          <h3><i className="pi pi-cog"></i> Settings</h3>
+          
+          <div className="settings-group">
+            <div className="setting-item">
+              <label>Display Options:</label>
+              <div className="setting-buttons">
+                <Button
+                  label="Active Words"
+                  icon="pi pi-eye"
+                  onClick={showActiveWords}
+                  className={`filter-button ${displayFilter === 'active' ? 'active' : ''}`}
+                  severity={displayFilter === 'active' ? 'success' : 'secondary'}
+                  size="small"
+                />
+                <Button
+                  label="All Words"
+                  icon="pi pi-list"
+                  onClick={showAllWords}
+                  className={`filter-button ${displayFilter === 'all' ? 'active' : ''}`}
+                  severity={displayFilter === 'all' ? 'success' : 'secondary'}
+                  size="small"
+                />
+              </div>
+            </div>
+            
+            <div className="setting-item">
+              <label>Primary Language:</label>
+              <div className="setting-buttons">
+                <Button 
+                  label="Eng"
+                  icon="pi pi-flag"
+                  onClick={switchToEnglish}
+                  className={`language-button ${primaryLanguage === 'english' ? 'active' : ''}`}
+                  severity={primaryLanguage === 'english' ? 'info' : 'secondary'}
+                  size="small"
+                />
+                <Button 
+                  label="Rus"
+                  icon="pi pi-flag-fill"
+                  onClick={switchToRussian}
+                  className={`language-button ${primaryLanguage === 'russian' ? 'active' : ''}`}
+                  severity={primaryLanguage === 'russian' ? 'info' : 'secondary'}
+                  size="small"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -765,22 +805,6 @@ function App() {
                 className={`card-toggle-button ${selectedData[currentCardIndex]?.display === 1 ? 'active' : 'inactive'}`}
                 severity={selectedData[currentCardIndex]?.display === 1 ? 'danger' : 'success'}
                 size="small"
-              />
-            </div>
-            
-            {/* Language Toggle Buttons */}
-            <div className="language-toggle">
-              <Button 
-                label="Eng"
-                onClick={switchToEnglish}
-                className={`language-button ${primaryLanguage === 'english' ? 'active' : ''}`}
-                severity={primaryLanguage === 'english' ? 'info' : 'secondary'}
-              />
-              <Button 
-                label="Rus"
-                onClick={switchToRussian}
-                className={`language-button ${primaryLanguage === 'russian' ? 'active' : ''}`}
-                severity={primaryLanguage === 'russian' ? 'info' : 'secondary'}
               />
             </div>
             

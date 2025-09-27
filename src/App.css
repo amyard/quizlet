@@ -1,3 +1,137 @@
+/* Settings Section Styles */
+.settings-section {
+  background-color: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 25px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.settings-section h3 {
+  margin: 0 0 20px 0;
+  color: #334155;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.settings-section h3 i {
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+.settings-group {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.setting-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.setting-item label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #475569;
+  margin: 0;
+  text-align: center;
+}
+
+.setting-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Enhanced Button Styles for Settings */
+.settings-section .filter-button,
+.settings-section .language-button {
+  padding: 8px 16px !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+  font-size: 0.9rem !important;
+  min-width: 90px !important;
+  border-width: 2px !important;
+}
+
+.settings-section .filter-button {
+  background-color: #64748b !important;
+  border-color: #64748b !important;
+  color: white !important;
+}
+
+.settings-section .filter-button:hover {
+  background-color: #475569 !important;
+  border-color: #475569 !important;
+  transform: translateY(-1px) !important;
+}
+
+.settings-section .filter-button.active {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3) !important;
+}
+
+.settings-section .filter-button.active:hover {
+  background-color: #047857 !important;
+  border-color: #047857 !important;
+}
+
+.settings-section .language-button {
+  background-color: #64748b !important;
+  border-color: #64748b !important;
+  color: white !important;
+}
+
+.settings-section .language-button:hover {
+  background-color: #475569 !important;
+  border-color: #475569 !important;
+  transform: translateY(-1px) !important;
+}
+
+.settings-section .language-button.active {
+  background-color: #0ea5e9 !important;
+  border-color: #0ea5e9 !important;
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3) !important;
+}
+
+.settings-section .language-button.active:hover {
+  background-color: #0284c7 !important;
+  border-color: #0284c7 !important;
+}
+
+/* Responsive Design for Settings */
+@media (max-width: 768px) {
+  .settings-group {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .setting-buttons {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .settings-section .filter-button,
+  .settings-section .language-button {
+    min-width: 80px !important;
+    font-size: 0.85rem !important;
+    padding: 6px 12px !important;
+  }
+}
+
 /* Multi-selection styles */
 .selection-hint {
   font-size: 0.9rem;
@@ -403,45 +537,6 @@
   transform: scale(1.05) !important;
 }
 
-/* Display Filter Styles */
-.display-filter-container {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.display-filter-container h3 {
-  margin-bottom: 15px;
-  color: #333;
-}
-
-.filter-button {
-  margin: 5px;
-  padding: 10px 20px !important;
-  font-weight: 600 !important;
-  border-radius: 8px !important;
-  transition: all 0.3s ease !important;
-  background-color: #6b7280 !important;
-  border: 2px solid #6b7280 !important;
-  color: white !important;
-}
-
-.filter-button:hover {
-  background-color: #4b5563 !important;
-  border-color: #4b5563 !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3) !important;
-}
-
-.filter-button.active {
-  background-color: #059669 !important;
-  border-color: #059669 !important;
-}
-
-.filter-button.active:hover {
-  background-color: #047857 !important;
-  border-color: #047857 !important;
-}
-
 /* Status Badge Styles */
 .status-badge {
   padding: 4px 8px;
@@ -544,43 +639,6 @@
 .all-button.active:hover {
   background-color: #047857 !important;
   border-color: #047857 !important;
-}
-
-/* Language Toggle Styles */
-.language-toggle {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.language-button {
-  padding: 8px 20px !important;
-  font-weight: 600 !important;
-  border-radius: 25px !important;
-  transition: all 0.3s ease !important;
-  min-width: 60px !important;
-}
-
-.language-button.active {
-  background-color: #0ea5e9 !important;
-  border-color: #0ea5e9 !important;
-  color: white !important;
-  transform: scale(1.05) !important;
-  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3) !important;
-}
-
-.language-button:not(.active) {
-  background-color: #e5e7eb !important;
-  border-color: #e5e7eb !important;
-  color: #6b7280 !important;
-}
-
-.language-button:not(.active):hover {
-  background-color: #d1d5db !important;
-  border-color: #d1d5db !important;
-  color: #374151 !important;
-  transform: translateY(-1px) !important;
 }
 
 /* Flashcard Styles */
