@@ -1,41 +1,197 @@
 [
-  {"eng": "rather", "rus": "довольно поздно", "display": 1},
-  {"eng": "auxiliary", "rus": "дополнительный, вспомогательный", "display": 1},
-  {"eng": "to remind", "rus": "напомнить", "display": 1},
-  {"eng": "to suppose", "rus": "полагать, допускать", "display": 1},
-  {"eng": "thin", "rus": "худой", "display": 1},
-  {"eng": "gentle", "rus": "добрый, мягкий", "display": 1},
-  {"eng": "absent-minded", "rus": "рассеяный", "display": 1},
-  {"eng": "much sense as ", "rus": "столько же смысла как", "display": 1},
-  {"eng": "post", "rus": "позиция", "display": 1},
-  {"eng": "to apply for", "rus": "подавать заявку на ", "display": 1},
-  {"eng": "self-confident", "rus": "самоуверенный", "display": 1},
-  {"eng": "arrogant", "rus": "самоуверенный (более эгоцентричный)", "display": 1},
-  {"eng": "to reduce", "rus": "уменьшить", "display": 1},
-  {"eng": "committee", "rus": "комитет", "display": 1},
-  {"eng": "final choice", "rus": "финальный выбор", "display": 1},
-  {"eng": "a subject", "rus": "тема", "display": 1},
-  {"eng": "to memorize", "rus": "запоминать", "display": 1},
-  {"eng": "to write out", "rus": "выписывать", "display": 1},
-  {"eng": "crowd", "rus": "толпа", "display": 1},
-  {"eng": "sleep like a log", "rus": "спать как бревно", "display": 1},
-  {"eng": "to his horror", "rus": "к своему ужасу", "display": 1},
-  {"eng": "typewritten", "rus": "напечатанная", "display": 1},
-  {"eng": "to disappear", "rus": "исчезать", "display": 1},
-  {"eng": "with despair", "rus": "с отчаянием", "display": 1},
-  {"eng": "calmly", "rus": "спокойно", "display": 1},
-  {"eng": "to admit", "rus": "признавать", "display": 1},
-  {"eng": "eloquently", "rus": "красноречиво, выразительно, лаконично", "display": 1},
-  {"eng": "to bow - /baʊ/", "rus": "поклониться", "display": 1},
-  {"eng": "to burst of applause", "rus": "разразиться / взорваться аплодисментами", "display": 1},
-  {"eng": "upset", "rus": "растроен", "display": 1},
-  {"eng": "dull voice", "rus": "скучный / тусклый голос", "display": 1},
-  {"eng": "to lean-leaned-leant across", "rus": "наклонить к", "display": 1},
-  {"eng": "to patt on the back", "rus": "похлопать по плечу", "display": 1},
-  {"eng": "smilingly", "rus": "с улыбкой", "display": 1},
-  {"eng": "hard luck", "rus": "невещение / неповезло", "display": 1},
-  {"eng": "to be filled with admiration", "rus": "быть наполненым восхищением", "display": 1},
-  {"eng": "to impress", "rus": "удивить", "display": 1},
-  {"eng": "necessary", "rus": "необходимый", "display": 1},
-  {"eng": "shake hand", "rus": "пожать руку", "display": 1}
+  {
+    "eng": "rather",
+    "rus": "довольно поздно",
+    "display": 1
+  },
+  {
+    "eng": "auxiliary",
+    "rus": "дополнительный, вспомогательный",
+    "display": 1
+  },
+  {
+    "eng": "to remind",
+    "rus": "напомнить",
+    "display": 1
+  },
+  {
+    "eng": "to suppose",
+    "rus": "полагать, допускать",
+    "display": 1
+  },
+  {
+    "eng": "thin",
+    "rus": "худой",
+    "display": 1
+  },
+  {
+    "eng": "gentle",
+    "rus": "добрый, мягкий",
+    "display": 1
+  },
+  {
+    "eng": "absent-minded",
+    "rus": "рассеяный",
+    "display": 1
+  },
+  {
+    "eng": "much sense as ",
+    "rus": "столько же смысла как",
+    "display": 1
+  },
+  {
+    "eng": "post",
+    "rus": "позиция (должность)",
+    "display": 1
+  },
+  {
+    "eng": "to apply for",
+    "rus": "подавать заявку на ",
+    "display": 1
+  },
+  {
+    "eng": "self-confident",
+    "rus": "самоуверенный",
+    "display": 1
+  },
+  {
+    "eng": "arrogant",
+    "rus": "самоуверенный (более эгоцентричный)",
+    "display": 1
+  },
+  {
+    "eng": "to reduce",
+    "rus": "уменьшить",
+    "display": 1
+  },
+  {
+    "eng": "committee",
+    "rus": "комитет",
+    "display": 1
+  },
+  {
+    "eng": "final choice",
+    "rus": "финальный выбор",
+    "display": 1
+  },
+  {
+    "eng": "a subject",
+    "rus": "тема",
+    "display": 1
+  },
+  {
+    "eng": "to memorize",
+    "rus": "запоминать",
+    "display": 1
+  },
+  {
+    "eng": "to write out",
+    "rus": "выписывать",
+    "display": 1
+  },
+  {
+    "eng": "crowd",
+    "rus": "толпа",
+    "display": 1
+  },
+  {
+    "eng": "sleep like a log",
+    "rus": "спать как бревно",
+    "display": 1
+  },
+  {
+    "eng": "to his horror",
+    "rus": "к своему ужасу",
+    "display": 1
+  },
+  {
+    "eng": "typewritten",
+    "rus": "напечатанная",
+    "display": 1
+  },
+  {
+    "eng": "to disappear",
+    "rus": "исчезать",
+    "display": 1
+  },
+  {
+    "eng": "with despair",
+    "rus": "с отчаянием",
+    "display": 1
+  },
+  {
+    "eng": "calmly",
+    "rus": "спокойно",
+    "display": 1
+  },
+  {
+    "eng": "to admit",
+    "rus": "признавать",
+    "display": 1
+  },
+  {
+    "eng": "eloquently",
+    "rus": "красноречиво, выразительно, лаконично",
+    "display": 1
+  },
+  {
+    "eng": "to bow - /baʊ/",
+    "rus": "поклониться",
+    "display": 1
+  },
+  {
+    "eng": "to burst of applause",
+    "rus": "разразиться / взорваться аплодисментами",
+    "display": 1
+  },
+  {
+    "eng": "upset",
+    "rus": "растроен",
+    "display": 1
+  },
+  {
+    "eng": "dull voice",
+    "rus": "скучный / тусклый голос",
+    "display": 1
+  },
+  {
+    "eng": "to lean - leaned - leant across",
+    "rus": "наклонить к",
+    "display": 1
+  },
+  {
+    "eng": "to patt on the back",
+    "rus": "похлопать по плечу",
+    "display": 1
+  },
+  {
+    "eng": "smilingly",
+    "rus": "с улыбкой",
+    "display": 1
+  },
+  {
+    "eng": "hard luck",
+    "rus": "невезение / неповезло",
+    "display": 1
+  },
+  {
+    "eng": "to be filled with admiration",
+    "rus": "быть наполненым восхищением",
+    "display": 1
+  },
+  {
+    "eng": "to impress",
+    "rus": "удивить",
+    "display": 1
+  },
+  {
+    "eng": "necessary",
+    "rus": "необходимый",
+    "display": 1
+  },
+  {
+    "eng": "shake hand",
+    "rus": "пожать руку",
+    "display": 1
+  }
 ]

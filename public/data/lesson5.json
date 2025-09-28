@@ -1,39 +1,187 @@
 [
-  {"eng": "threatening", "rus": "угрожающий, опасный, грозный", "display": 1},
-  {"eng": "to threaten", "rus": "угрожать, грозить", "display": 1},
-  {"eng": "a caretaker", "rus": "охранник", "display": 1},
-  {"eng": "to sweep - swept- swept", "rus": "подметать", "display": 1},
-  {"eng": "blackboard", "rus": "школьная доска", "display": 1},
-  {"eng": "odd", "rus": "странный, четный, необычный", "display": 1},
-  {"eng": "as a matter of fact", "rus": "на самом деле, фактически", "display": 1},
-  {"eng": "a headmaster", "rus": "директор", "display": 1},
-  {"eng": "easy-going", "rus": "общительный, спокойный", "display": 1},
-  {"eng": "no credit", "rus": "без веры", "display": 1},
-  {"eng": "scholar", "rus": "ученик", "display": 1},
-  {"eng": "fishing-rod", "rus": "удобка", "display": 1},
-  {"eng": "beyond me", "rus": "выше моего понимания", "display": 1},
-  {"eng": "judge", "rus": "судья", "display": 1},
-  {"eng": "shrewdest", "rus": "самый проницательный", "display": 1},
-  {"eng": "weight up", "rus": "взвесить", "display": 1},
-  {"eng": "to deceive", "rus": "обманивать", "display": 1},
-  {"eng": "broom", "rus": "метла, веник", "display": 1},
-  {"eng": "properly", "rus": "правильно, должным образом", "display": 1},
-  {"eng": "efficient", "rus": "эффективный, подготовленный", "display": 1},
-  {"eng": "up-to-date", "rus": "современный, актуальный", "display": 1},
-  {"eng": "scholarship", "rus": "стидендия", "display": 1},
-  {"eng": "efficiency", "rus": "продуктивность", "display": 1},
-  {"eng": "inefficient", "rus": "непродуктивный", "display": 1},
-  {"eng": "motto", "rus": "девиз", "display": 1},
-  {"eng": "complaints", "rus": "жалобы", "display": 1},
-  {"eng": "time-book", "rus": "табель учета рабочего времени", "display": 1},
-  {"eng": "staff", "rus": "персонал", "display": 1},
-  {"eng": "to dare", "rus": "позволить", "display": 1},
-  {"eng": "to expect", "rus": "ожидать", "display": 1},
-  {"eng": "carry out", "rus": "осуществлять,выполнить", "display": 1},
-  {"eng": "awkward - /'ɔː kwəd/", "rus": "неловкий, неудобный, затруднительный", "display": 1},
-  {"eng": "truthful", "rus": "правдивый", "display": 1},
-  {"eng": "an official", "rus": "чиновник, должностное лицо", "display": 1},
-  {"eng": "establishment", "rus": "учреждение", "display": 1},
-  {"eng": "fault", "rus": "ошибка, вина", "display": 1},
-  {"eng": "to dismiss", "rus": "выгнать", "display": 1}
+  {
+    "eng": "threatening",
+    "rus": "угрожающий, опасный, грозный",
+    "display": 1
+  },
+  {
+    "eng": "to threaten",
+    "rus": "угрожать, грозить",
+    "display": 1
+  },
+  {
+    "eng": "a caretaker",
+    "rus": "охранник",
+    "display": 1
+  },
+  {
+    "eng": "to sweep - swept- swept",
+    "rus": "подметать",
+    "display": 1
+  },
+  {
+    "eng": "blackboard",
+    "rus": "школьная доска",
+    "display": 1
+  },
+  {
+    "eng": "odd",
+    "rus": "странный, четный, необычный",
+    "display": 1
+  },
+  {
+    "eng": "as a matter of fact",
+    "rus": "на самом деле, фактически",
+    "display": 1
+  },
+  {
+    "eng": "a headmaster",
+    "rus": "директор",
+    "display": 1
+  },
+  {
+    "eng": "easy-going",
+    "rus": "общительный, спокойный",
+    "display": 1
+  },
+  {
+    "eng": "no credit",
+    "rus": "без веры",
+    "display": 1
+  },
+  {
+    "eng": "scholar",
+    "rus": "ученик",
+    "display": 1
+  },
+  {
+    "eng": "fishing-rod",
+    "rus": "удобка",
+    "display": 1
+  },
+  {
+    "eng": "beyond me",
+    "rus": "выше моего понимания",
+    "display": 1
+  },
+  {
+    "eng": "judge",
+    "rus": "судья",
+    "display": 1
+  },
+  {
+    "eng": "shrewdest",
+    "rus": "самый проницательный",
+    "display": 1
+  },
+  {
+    "eng": "weight up",
+    "rus": "взвесить (считать человека)",
+    "display": 1
+  },
+  {
+    "eng": "to deceive",
+    "rus": "обманивать",
+    "display": 1
+  },
+  {
+    "eng": "broom",
+    "rus": "метла, веник",
+    "display": 1
+  },
+  {
+    "eng": "properly",
+    "rus": "правильно, должным образом",
+    "display": 1
+  },
+  {
+    "eng": "efficient",
+    "rus": "эффективный, подготовленный",
+    "display": 1
+  },
+  {
+    "eng": "up-to-date",
+    "rus": "современный, актуальный",
+    "display": 1
+  },
+  {
+    "eng": "scholarship",
+    "rus": "стидендия",
+    "display": 1
+  },
+  {
+    "eng": "efficiency",
+    "rus": "продуктивность",
+    "display": 1
+  },
+  {
+    "eng": "inefficient",
+    "rus": "непродуктивный",
+    "display": 1
+  },
+  {
+    "eng": "motto",
+    "rus": "девиз",
+    "display": 1
+  },
+  {
+    "eng": "complaints",
+    "rus": "жалобы",
+    "display": 1
+  },
+  {
+    "eng": "time-book",
+    "rus": "табель учета рабочего времени",
+    "display": 1
+  },
+  {
+    "eng": "staff",
+    "rus": "персонал",
+    "display": 1
+  },
+  {
+    "eng": "to dare",
+    "rus": "позволить",
+    "display": 1
+  },
+  {
+    "eng": "to expect",
+    "rus": "ожидать",
+    "display": 1
+  },
+  {
+    "eng": "carry out",
+    "rus": "осуществлять,выполнить",
+    "display": 1
+  },
+  {
+    "eng": "awkward - /'ɔː kwəd/",
+    "rus": "неловкий, неудобный, затруднительный",
+    "display": 1
+  },
+  {
+    "eng": "truthful",
+    "rus": "правдивый",
+    "display": 1
+  },
+  {
+    "eng": "an official",
+    "rus": "чиновник, должностное лицо",
+    "display": 1
+  },
+  {
+    "eng": "establishment",
+    "rus": "учреждение",
+    "display": 1
+  },
+  {
+    "eng": "fault",
+    "rus": "ошибка, вина",
+    "display": 1
+  },
+  {
+    "eng": "to dismiss",
+    "rus": "выгнать",
+    "display": 1
+  }
 ]
