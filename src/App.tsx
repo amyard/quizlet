@@ -32,6 +32,9 @@ function App() {
   const [showTable, setShowTable] = useState<boolean>(false)
   const [displayFilter, setDisplayFilter] = useState<'active' | 'all'>('active')
   
+  // Blur functionality states
+  const [blurMode, setBlurMode] = useState<'none' | 'blur'>('none')
+  
   // Search and Edit states
   const [globalFilterValue, setGlobalFilterValue] = useState<string>('')
   const [filters, setFilters] = useState({
@@ -49,6 +52,15 @@ function App() {
   
   // Toast reference
   const toast = useRef<Toast>(null)
+
+  // Blur functionality
+  const enableBlur = () => {
+    setBlurMode('blur')
+  }
+
+  const disableBlur = () => {
+    setBlurMode('none')
+  }
 
   // Generate unique ID for words
   const generateId = () => {
@@ -643,6 +655,18 @@ function App() {
     )
   }
 
+  // Custom column body for blurred columns
+  const renderBlurredColumn = (rowData: WordPair, field: 'eng' | 'rus') => {
+    if (blurMode === 'blur' && primaryLanguage === (field === 'eng' ? 'english' : 'russian')) {
+      return (
+        <span className="blurred-cell" data-content={rowData[field]}>
+          {rowData[field]}
+        </span>
+      )
+    }
+    return rowData[field]
+  }
+
   // Render search header
   const renderHeader = () => {
     return (
@@ -786,6 +810,28 @@ function App() {
                 />
               </div>
             </div>
+
+            <div className="setting-item">
+              <label>Blur Mode:</label>
+              <div className="setting-buttons">
+                <Button 
+                  label="Blur"
+                  icon="pi pi-eye-slash"
+                  onClick={enableBlur}
+                  className={`blur-button ${blurMode === 'blur' ? 'active' : ''}`}
+                  severity={blurMode === 'blur' ? 'warning' : 'secondary'}
+                  size="small"
+                />
+                <Button 
+                  label="Clean"
+                  icon="pi pi-eye"
+                  onClick={disableBlur}
+                  className={`clean-button ${blurMode === 'none' ? 'active' : ''}`}
+                  severity={blurMode === 'none' ? 'success' : 'secondary'}
+                  size="small"
+                />
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -867,7 +913,7 @@ function App() {
 
           {/* Data Table with Search and Edit functionality */}
           {showTable && (
-            <div className="data-table">
+            <div className={`data-table ${blurMode === 'blur' ? 'blur-mode' : ''}`}>
               <h3>Vocabulary: {getDisplayTitle()}</h3>
               <DataTable 
                 value={selectedData}
@@ -883,8 +929,18 @@ function App() {
                 currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
                 emptyMessage="No words found."
               >
-                <Column field="eng" header="English" style={{ width: '25%' }}></Column>
-                <Column field="rus" header="Russian" style={{ width: '25%' }}></Column>
+                <Column 
+                  field="eng" 
+                  header="English" 
+                  style={{ width: '25%' }}
+                  body={(rowData) => renderBlurredColumn(rowData, 'eng')}
+                ></Column>
+                <Column 
+                  field="rus" 
+                  header="Russian" 
+                  style={{ width: '25%' }}
+                  body={(rowData) => renderBlurredColumn(rowData, 'rus')}
+                ></Column>
                 {displayFilter === 'all' && (
                   <Column 
                     field="display" 

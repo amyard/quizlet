@@ -55,7 +55,9 @@
 
 /* Enhanced Button Styles for Settings */
 .settings-section .filter-button,
-.settings-section .language-button {
+.settings-section .language-button,
+.settings-section .blur-button,
+.settings-section .clean-button {
   padding: 8px 16px !important;
   font-weight: 600 !important;
   border-radius: 8px !important;
@@ -111,6 +113,54 @@
   border-color: #0284c7 !important;
 }
 
+/* Blur Button Styles */
+.settings-section .blur-button {
+  background-color: #64748b !important;
+  border-color: #64748b !important;
+  color: white !important;
+}
+
+.settings-section .blur-button:hover {
+  background-color: #475569 !important;
+  border-color: #475569 !important;
+  transform: translateY(-1px) !important;
+}
+
+.settings-section .blur-button.active {
+  background-color: #f59e0b !important;
+  border-color: #f59e0b !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3) !important;
+}
+
+.settings-section .blur-button.active:hover {
+  background-color: #d97706 !important;
+  border-color: #d97706 !important;
+}
+
+/* Clean Button Styles */
+.settings-section .clean-button {
+  background-color: #64748b !important;
+  border-color: #64748b !important;
+  color: white !important;
+}
+
+.settings-section .clean-button:hover {
+  background-color: #475569 !important;
+  border-color: #475569 !important;
+  transform: translateY(-1px) !important;
+}
+
+.settings-section .clean-button.active {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3) !important;
+}
+
+.settings-section .clean-button.active:hover {
+  background-color: #047857 !important;
+  border-color: #047857 !important;
+}
+
 /* Responsive Design for Settings */
 @media (max-width: 768px) {
   .settings-group {
@@ -125,7 +175,9 @@
   }
   
   .settings-section .filter-button,
-  .settings-section .language-button {
+  .settings-section .language-button,
+  .settings-section .blur-button,
+  .settings-section .clean-button {
     min-width: 80px !important;
     font-size: 0.85rem !important;
     padding: 6px 12px !important;
@@ -913,4 +965,46 @@
   border-color: #4b5563 !important;
   transform: translateY(-2px) !important;
   box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3) !important;
+}
+
+/* Blur Mode Styles */
+.blur-mode .blurred-cell {
+  color: transparent !important;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.blur-mode .blurred-cell::before {
+  content: attr(data-content);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: transparent;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+  z-index: 1;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.blur-mode tr:hover .blurred-cell {
+  color: inherit !important;
+  background-color: transparent;
+}
+
+.blur-mode tr:hover .blurred-cell::before {
+  text-shadow: none;
+  /*color: inherit;*/
+}
+
+/* Enhanced table row hover for blur mode */
+.blur-mode .p-datatable .p-datatable-tbody > tr:hover {
+  background-color: #f1f5f9 !important;
+  transform: scale(1.01);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
