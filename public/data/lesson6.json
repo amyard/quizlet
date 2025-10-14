@@ -1,3 +1,401 @@
 [
-  {"eng": "111111", "rus": "111111", "display": 1}
+  {
+    "eng": "to produce",
+    "rus": "выпустить, создать, производить",
+    "display": 1
+  },
+  {
+    "eng": "novel",
+    "rus": "роман",
+    "display": 1
+  },
+  {
+    "eng": "volumes of tales",
+    "rus": "томы сказок",
+    "display": 1
+  },
+  {
+    "eng": "audience",
+    "rus": "аудитория, зритель, публика",
+    "display": 1
+  },
+  {
+    "eng": "throughout (/θɹuː 'aʊt/) the world",
+    "rus": "по всему миру",
+    "display": 1
+  },
+  {
+    "eng": "to exercise",
+    "rus": "осуществлять, воспользоваться",
+    "display": 1
+  },
+  {
+    "eng": "an influence",
+    "rus": "влияние, воздествие, авторитет",
+    "display": 1
+  },
+  {
+    "eng": "unfading charm",
+    "rus": "неувядаюший / неугасимый / вечный  очарование",
+    "display": 1
+  },
+  {
+    "eng": "farcical",
+    "rus": "абсурдный, нелепый, фарсовый",
+    "display": 1
+  },
+  {
+    "eng": "sentiment naive",
+    "rus": "-----",
+    "display": 1
+  },
+  {
+    "eng": "blended with moralizing",
+    "rus": "примесью морализаторства, элементами нравоучений",
+    "display": 1
+  },
+  {
+    "eng": "travelogue",
+    "rus": "фильм о путишествии, путевой дневник",
+    "display": 1
+  },
+  {
+    "eng": "to record",
+    "rus": "записывать, фиксировать",
+    "display": 1
+  },
+  {
+    "eng": "facetious",
+    "rus": "шутливый, забавный",
+    "display": 1
+  },
+  {
+    "eng": "narrator(/'nærətər/)",
+    "rus": "рассказчик, диктор",
+    "display": 1
+  },
+  {
+    "eng": "constantly",
+    "rus": "постоянно, всегда, все время",
+    "display": 1
+  },
+  {
+    "eng": "invariably",
+    "rus": "неизменно, неизбежно, постоянно",
+    "display": 1
+  },
+  {
+    "eng": "in the course of events",
+    "rus": "в ходе событий, в процессе развития событий",
+    "display": 1
+  },
+  {
+    "eng": "to get acquainted (/ə'kweɪnt/)",
+    "rus": "познакомиться",
+    "display": 1
+  },
+  {
+    "eng": "along the banks",
+    "rus": "вдоль берегов",
+    "display": 1
+  },
+  {
+    "eng": "in an informal and jocular way",
+    "rus": "в неформальной и шутливой манере",
+    "display": 1
+  },
+  {
+    "eng": "to treat",
+    "rus": "Рассматривать (Лечить, Обращаться)",
+    "display": 1
+  },
+  {
+    "eng": "deliberate familiarity",
+    "rus": "намеренная фамильярность",
+    "display": 1
+  },
+  {
+    "eng": "to mock",
+    "rus": "насмехаться, высмеивать",
+    "display": 1
+  },
+  {
+    "eng": "exaggerated (/ɪɡ'zæ.dʒəɹeɪ.tɪd/)",
+    "rus": "преувеличенный",
+    "display": 1
+  },
+  {
+    "eng": "instructive remarks",
+    "rus": "поучительные замечания, наставления",
+    "display": 1
+  },
+  {
+    "eng": "claim",
+    "rus": "Заявление, Претензия, требование, ",
+    "display": 1
+  },
+  {
+    "eng": "to clai",
+    "rus": "Заявлять, утверждать, Требовать, предъявлять права",
+    "display": 1
+  },
+  {
+    "eng": "comprehension",
+    "rus": "понимание, осмысление",
+    "display": 1
+  },
+  {
+    "eng": "fortnight",
+    "rus": "две недели, двухнедельный период",
+    "display": 1
+  },
+  {
+    "eng": "germ",
+    "rus": "Микроорганизм, вызывающий болезнь; Зародыш, эмбрион",
+    "display": 1
+  },
+  {
+    "eng": "indignation",
+    "rus": "возмущение, негодование",
+    "display": 1
+  },
+  {
+    "eng": "objection",
+    "rus": "возражение, протест, несогласие",
+    "display": 1
+  },
+  {
+    "eng": "pump",
+    "rus": "Насос, Кроссовки/спортивная обувь",
+    "display": 1
+  },
+  {
+    "eng": "spokesman",
+    "rus": "представитель, пресс-секретарь",
+    "display": 1
+  },
+  {
+    "eng": "unjust",
+    "rus": "несправедливый",
+    "display": 1
+  },
+  {
+    "eng": "sufficiently",
+    "rus": "достаточно, в достаточной степени",
+    "display": 1
+  },
+  {
+    "eng": "to menace",
+    "rus": " угрожать, представлять опасность, пугать",
+    "display": 1
+  },
+  {
+    "eng": "to pull up",
+    "rus": "Остановиться / притормозить, Подъехать / подойти",
+    "display": 1
+  },
+  {
+    "eng": "to settle down",
+    "rus": "успокоиться, осесть, обосноваться",
+    "display": 1
+  },
+  {
+    "eng": "to spare",
+    "rus": "Выделить / уделить (время, деньги и т. д.)",
+    "display": 1
+  },
+  {
+    "eng": "to threaten",
+    "rus": "угрожать",
+    "display": 1
+  },
+  {
+    "eng": "to upset",
+    "rus": "Расстраивать, огорчать",
+    "display": 1
+  },
+  {
+    "eng": "to be short of",
+    "rus": "испытывать нехватку",
+    "display": 1
+  },
+  {
+    "eng": "catch hold of",
+    "rus": "схватить, ухватиться",
+    "display": 1
+  },
+  {
+    "eng": "grasp an idea",
+    "rus": "понять идею, уловить суть",
+    "display": 1
+  },
+  {
+    "eng": "on purpose",
+    "rus": "намеренно, специально, умышленно",
+    "display": 1
+  },
+  {
+    "eng": "on the verge of",
+    "rus": "на грани (чего-либо)",
+    "display": 1
+  },
+  {
+    "eng": "jar",
+    "rus": "банка",
+    "display": 1
+  },
+  {
+    "eng": "to murmure",
+    "rus": "бормотать, шептать",
+    "display": 1
+  },
+  {
+    "eng": "stolid",
+    "rus": "флегматичный, невозмутимый",
+    "display": 1
+  },
+  {
+    "eng": "to twist",
+    "rus": "Крутить, скручивать / Извиваться, вертеться",
+    "display": 1
+  },
+  {
+    "eng": "his appearance after the course",
+    "rus": "его внешний вид после курса",
+    "display": 1
+  },
+  {
+    "eng": "to daresay",
+    "rus": "осмелюсь сказать",
+    "display": 1
+  },
+  {
+    "eng": "backwater",
+    "rus": "захолустье, заводь, болото",
+    "display": 1
+  },
+  {
+    "eng": "kettle",
+    "rus": "чайник, котелок",
+    "display": 1
+  },
+  {
+    "eng": "westward",
+    "rus": "на запад, западнее",
+    "display": 1
+  },
+  {
+    "eng": "gaze",
+    "rus": "взгляд",
+    "display": 1
+  },
+  {
+    "eng": "sluggish current",
+    "rus": "вяло текущие",
+    "display": 1
+  },
+  {
+    "eng": "content",
+    "rus": "довольствоваться, удовлетворить",
+    "display": 1
+  },
+  {
+    "eng": "a serene",
+    "rus": "спокойный, безмятежный",
+    "display": 1
+  },
+  {
+    "eng": "dignified",
+    "rus": "достойный, благородный, величественный",
+    "display": 1
+  },
+  {
+    "eng": "to dignify",
+    "rus": "удостаивать, почтить, величать",
+    "display": 1
+  },
+  {
+    "eng": "abreast",
+    "rus": "в ряд, бок о бок, рядом",
+    "display": 1
+  },
+  {
+    "eng": "among the rushes",
+    "rus": "среди камышей, в зарослях тростника",
+    "display": 1
+  },
+  {
+    "eng": "to ease up",
+    "rus": "ослабить, расслабить",
+    "display": 1
+  },
+  {
+    "eng": "cosily",
+    "rus": "уютно",
+    "display": 1
+  },
+  {
+    "eng": "to follow suit",
+    "rus": "последовать примеру, поступить так же",
+    "display": 1
+  },
+  {
+    "eng": "studded with",
+    "rus": "усеянные",
+    "display": 1
+  },
+  {
+    "eng": "with posts and chains",
+    "rus": "с кольями/шестами/опорами и цепями",
+    "display": 1
+  },
+  {"eng": "backwater", "rus": "болото, глушь, глубинка", "display": 1 },
+  {"eng": "shady", "rus": "теневой, подозрительный", "display": 1 },
+  {"eng": "to be surrounded", "rus": "окружены", "display": 1 },
+  {"eng": "notice-board", "rus": "доске объявлений", "display": 1 },
+  {"eng": "menacing", "rus": "угрожающий, грозный, зловещий", "display": 1 },
+  {"eng": "to menace", "rus": "угрожать, грозить", "display": 1 },
+  {"eng": "a torture", "rus": "пытка", "display": 1 },
+  {"eng": "imprisonment", "rus": "тюремное заключение, лишение свободы", "display": 1 },
+  {"eng": "who dares set skull upon", "rus": "кто осмелится возложить череп на...", "display": 1 },
+  {"eng": "to wonder", "rus": "задаваться вопросом, удивляться, гадать", "display": 1 },
+  {"eng": "to claim", "rus": "утверждать, заявлять, требовать", "display": 1 },
+  {"eng": "don't claim the air of river", "rus": "не присваивай воздух реки", "display": 1 },
+  {"eng": "fine", "rus": "штраф", "display": 1 },
+  {"eng": "to breathe", "rus": "дышать", "display": 1 },
+  {"eng": "to avoid", "rus": "избегать", "display": 1 },
+  {"eng": "meadow", "rus": "луг, поляна", "display": 1 },
+  {"eng": "to carve /kɑɹv/ /kɑː rv/", "rus": "разрезать на порции", "display": 1 },
+  {"eng": "a gravy", "rus": "соус, подливка", "display": 1 },
+  {"eng": "hamper", "rus": "корзина", "display": 1 },
+  {"eng": "a bit of hedge", "rus": "немного живой изгороди", "display": 1 },
+  {"eng": "to tumble", "rus": "упасть, падать", "display": 1 },
+  {"eng": "to climb", "rus": "подниматься, взобраться", "display": 1 },
+  {"eng": "to gaze", "rus": "взглянуть, посмотреть, любоваться", "display": 1 },
+  {"eng": "to snatch up", "rus": "схватить, урвать", "display": 1 },
+  {"eng": "queried", "rus": "спросил, запрашивать", "display": 1 },
+  {"eng": "objection", "rus": "возражении, отказ, несогласии", "display": 1 },
+  {"eng": "to discard", "rus": "отказаться, отбросить", "display": 1 },
+  {"eng": "with a touch of sadness in his voice", "rus": "с ноткой грусти в голосе", "display": 1 },
+  {"eng": "bear upon", "rus": "влиять на", "display": 1 },
+  {"eng": "an expression", "rus": "выражение", "display": 1 },
+  {"eng": "indignation", "rus": "возмущение,  негодование", "display": 1 },
+  {"eng": "to recover", "rus": "оправиться, восстановить", "display": 1 },
+  {"eng": "on purpose", "rus": "специально, намеренно", "display": 1 },
+  {"eng": "to exclaim", "rus": "воскликнуть", "display": 1 },
+  {"eng": "darn silly trick", "rus": "чертовски глупая выходка", "display": 1 },
+  {"eng": "to rise - rose - risen", "rus": "возвышаться, вырасти, увеличиваться", "display": 1 },
+  {"eng": "to scramble", "rus": "карабкаться", "display": 1 },
+  {"eng": "tumbled", "rus": "-------", "display": 1 },
+  {"eng": "to tumble", "rus": "падать, кувыркаться", "display": 1 },
+  {"eng": "grubby", "rus": "грязный", "display": 1 },
+  {"eng": "on the verge of small gully", "rus": "на краю небольшой лощины / на обрыве у маленькой балки", "display": 1 },
+  {"eng": "to lean", "rus": "склониться, опираться", "display": 1 },
+  {"eng": "conjecture", "rus": "гипотеза, догадка", "display": 1 },
+  {"eng": "the slightest", "rus": "малейший, незначительный", "display": 1 },
+  {"eng": "beforehand", "rus": "заранее, предварительно", "display": 1 },
+  {"eng": "unjust", "rus": "несправедливый, неправдивый", "display": 1 },
+  {"eng": "suspicion", "rus": "подозрение", "display": 1 },
+  {"eng": "blameless", "rus": "безупречный, невиновный", "display": 1 },
+  {"eng": "calumny", "rus": "клевета", "display": 1 }
 ]
